@@ -2,7 +2,8 @@ package com.example.WebProjekat.entity;
 
 import javax.persistence.*;
 
-;
+;import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Artikal
@@ -16,6 +17,9 @@ public class Artikal
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Restoran restoran;
+
+    @OneToMany(mappedBy = "artikal",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
 
     @Column
     private String naziv;
@@ -51,6 +55,14 @@ public class Artikal
         this.opis = "Mleko brt";
     }
 
+
+    public Set<PoruceniArtikli> getPoruceniArtikli() {
+        return poruceniArtikli;
+    }
+
+    public void setPoruceniArtikli(Set<PoruceniArtikli> poruceniArtikli) {
+        this.poruceniArtikli = poruceniArtikli;
+    }
 
     public String getNaziv() {
         return naziv;

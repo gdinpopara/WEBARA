@@ -12,9 +12,10 @@ import java.util.Date;
 enum Uloga{ADMIN,MENADZER,DOSTAVLJAC,KUPAC};
 
 @Entity
-public abstract class Korisnik
+public class Korisnik
 {
     @Id
+    @Column(unique = true)
     protected String korisnickoIme;
 
     @Column

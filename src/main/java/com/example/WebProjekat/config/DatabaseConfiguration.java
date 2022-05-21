@@ -1,4 +1,4 @@
-package com.example.WebProjekat.controller;
+package com.example.WebProjekat.config;
 
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.*;
@@ -47,10 +47,13 @@ public class DatabaseConfiguration
     @Autowired
     private TipKupcaRepository tipKupcaRepository;
 
+    @Autowired
+    private AdminRepository adminRepository;
+
     @Bean
     public boolean instantiate()
     {
-        Artikal artikal1 = new Artikal("Cevapi",200, Tip.JELO,50,"Narodno jelo od mlevenog mesa juneceg porekla");
+        /*Artikal artikal1 = new Artikal("Cevapi",200, Tip.JELO,50,"Narodno jelo od mlevenog mesa juneceg porekla");
         Artikal artikal2 = new Artikal("Pljeskavica",150,Tip.JELO,20,"ide gas");
 
         Set<Artikal> artikli = new HashSet<>();
@@ -63,8 +66,8 @@ public class DatabaseConfiguration
 
 
         Menadzer aleksa = new Menadzer("popara", "popara123", "Aleksa", "Lukac", "M", new Date());
-        Kupac nikola = new Kupac("cveya","cveya123","Nikola","Cvejic","M", new Date(),porudzbine,20);
         menadzerRepository.save(aleksa);
+        Kupac nikola = new Kupac("cveya","cveya123","Nikola","Cvejic","M", new Date(),porudzbine,20);
         kupacRepository.save(nikola);
 
         Restoran restoran = new Restoran(aleksa,"Siki");
@@ -88,7 +91,13 @@ public class DatabaseConfiguration
 
 
         menadzerRepository.save(aleksa);
-        kupacRepository.save(nikola);
+        kupacRepository.save(nikola);*/
+
+        //Menadzer aleksa = new Menadzer("popara", "popara123", "Aleksa", "Lukac", "M", new Date());
+        //menadzerRepository.save(aleksa);
+
+        admin admin1 = new admin("admin1","nekasifra");
+        adminRepository.save(admin1);
 
         return true;
     }

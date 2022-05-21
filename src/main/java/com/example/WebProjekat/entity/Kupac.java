@@ -17,6 +17,13 @@ public class Kupac extends Korisnik
         this.uloga = Uloga.KUPAC;
     }
 
+    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, int brojBodova) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja);
+        this.brojBodova = brojBodova;
+    }
+
+
+
     public Kupac()
     {}
 

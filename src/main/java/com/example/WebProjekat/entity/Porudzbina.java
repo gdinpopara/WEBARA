@@ -6,15 +6,22 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 ;
 
 @Entity
 public class Porudzbina {
-    public Porudzbina(Dostavljac dostavljac, Set<Artikal> poruceniArtikli, Kupac kupac, Restoran restoranPoruceno, Date datumIVremePorudzbine, double cena, String kupacIme, Status status) {
+
+
+    public Porudzbina(){}
+
+    public Porudzbina(UUID id, Dostavljac dostavljac, Set<Artikal> artikli, Kupac kupac, Set<PoruceniArtikli> poruceniArtikli, Restoran restoranPoruceno, Date datumIVremePorudzbine, double cena, String kupacIme, Status status) {
+        this.id = id;
         this.dostavljac = dostavljac;
-        this.poruceniArtikli = poruceniArtikli;
+        this.artikli = artikli;
         this.kupac = kupac;
+        this.poruceniArtikli = poruceniArtikli;
         this.restoranPoruceno = restoranPoruceno;
         this.datumIVremePorudzbine = datumIVremePorudzbine;
         this.cena = cena;
@@ -22,20 +29,21 @@ public class Porudzbina {
         this.status = status;
     }
 
-    public Porudzbina(){}
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long UUID;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Dostavljac dostavljac;
 
     @OneToMany(mappedBy = "porudzbina", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Artikal> poruceniArtikli = new HashSet<>();
+    private Set<Artikal> artikli = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Kupac kupac;
+
+    @OneToMany(mappedBy = "porudzbina", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
 
     @OneToOne
     private Restoran restoranPoruceno;
@@ -52,19 +60,21 @@ public class Porudzbina {
     @Column
     private Status status;
 
-    public long getUUID() {
-        return UUID;
+    public UUID getId() {
+        return id;
     }
 
-    public void setUUID(long UUID) {
-        this.UUID = UUID;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public Set<Artikal> getPoruceniArtikli() {
+
+
+    public Set<PoruceniArtikli> getPoruceniArtikli() {
         return poruceniArtikli;
     }
 
-    public void setPoruceniArtikli(Set<Artikal> poruceniArtikli) {
+    public void setPoruceniArtikli(Set<PoruceniArtikli> poruceniArtikli) {
         this.poruceniArtikli = poruceniArtikli;
     }
 
