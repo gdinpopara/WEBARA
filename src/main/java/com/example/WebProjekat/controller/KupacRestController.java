@@ -1,18 +1,17 @@
 package com.example.WebProjekat.controller;
 
+import com.example.WebProjekat.dto.KorpaDto;
 import com.example.WebProjekat.dto.KupacDto;
 import com.example.WebProjekat.dto.LoginDto;
-import com.example.WebProjekat.entity.Kupac;
-import com.example.WebProjekat.entity.Porudzbina;
-import com.example.WebProjekat.entity.admin;
+import com.example.WebProjekat.entity.*;
+import com.example.WebProjekat.service.ArtikalService;
+import com.example.WebProjekat.service.KorpaService;
 import com.example.WebProjekat.service.KupacService;
+import com.example.WebProjekat.service.PorudzbinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -23,6 +22,15 @@ public class KupacRestController
 {
     @Autowired
     private KupacService kupacService;
+
+    @Autowired
+    private PorudzbinaService porudzbinaService;
+
+    @Autowired
+    private ArtikalService artikalService;
+
+    @Autowired
+    private KorpaService korpaService;
 
     @PostMapping("/api/kupac/registracija")
     public String saveKupac(@RequestBody Kupac kupac)
@@ -80,6 +88,47 @@ public class KupacRestController
         Set<Porudzbina> porudzbine = kupacService.pregledajPorudzbine(username);
 
         return ResponseEntity.ok(porudzbine);
+    }
+
+
+    //prebaciti u restoran rest controller??
+    @PostMapping("/api/kupac/restoran/dodaj-u-korpu")
+    public ResponseEntity<KorpaDto> dodajUKorpu(@RequestBody KorpaDto korpaDto, HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac==null)
+        {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+
+        if(korpaDto.getKolicina()<=0)
+        {
+            return new ResponseEntity("Morate uneti jedan ili vise artikala!",HttpStatus.BAD_REQUEST);
+        }
+
+        if( korpaDto.getIDartikal()==null || korpaDto.getNazivRestorana()==null)
+        {
+            return new ResponseEntity("Morate uneti podatke!",HttpStatus.BAD_REQUEST);
+        }
+
+        korpaService.dodajUKorpu(logovaniKupac,korpaDto);
+        return ResponseEntity.ok(korpaDto);
+    }
+
+    @GetMapping("/api/kupac/pregled-korpe")
+    public ResponseEntity<Korpa> pregledKorpe(HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac==null)
+        {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+
+        Korpa korpa = korpaService.pregledajKorpu(logovaniKupac);
+        return ResponseEntity.ok(korpa);
+
     }
 
 }

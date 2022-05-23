@@ -9,7 +9,7 @@ public class PoruceniArtikli
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Artikal artikal;
 
     @ManyToOne
@@ -20,6 +20,9 @@ public class PoruceniArtikli
 
     @Column
     private double ukupnaCena;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Korpa korpa;
 
 
     public PoruceniArtikli() {

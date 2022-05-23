@@ -18,7 +18,7 @@ public class Restoran
     @OneToOne(mappedBy = "restoranPoruceno")
     private Porudzbina porudzbina;
 
-    @OneToMany(mappedBy = "restoran", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restoran", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Komentar> komentari = new HashSet<>();
 
     @Id
@@ -27,7 +27,10 @@ public class Restoran
     @Column
     private String tip;
 
-    @OneToMany(mappedBy = "restoran",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column
+    private boolean radi;
+
+    @OneToMany(mappedBy = "restoran",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Artikal> artikli = new HashSet<>();
 
     @OneToOne(mappedBy = "restoran")
@@ -50,6 +53,7 @@ public class Restoran
     public Restoran(Menadzer menadzer, String naziv) {
         this.menadzer = menadzer;
         this.naziv = naziv;
+        this.radi=true;
     }
 
     public Restoran(Menadzer menadzer, Porudzbina porudzbina, Set<Komentar> komentari, String naziv, String tip, Set<Artikal> artikli, Lokacija lokacija) {
@@ -60,6 +64,7 @@ public class Restoran
         this.tip = tip;
         this.artikli = artikli;
         this.lokacija = lokacija;
+        this.radi = true;
     }
 
     public Menadzer getMenadzer() {
@@ -116,5 +121,13 @@ public class Restoran
 
     public void setLokacija(Lokacija lokacija) {
         this.lokacija = lokacija;
+    }
+
+    public boolean isRadi() {
+        return radi;
+    }
+
+    public void setRadi(boolean radi) {
+        this.radi = radi;
     }
 }

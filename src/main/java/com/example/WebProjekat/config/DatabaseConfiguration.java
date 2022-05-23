@@ -53,8 +53,11 @@ public class DatabaseConfiguration
     @Bean
     public boolean instantiate()
     {
-        /*Artikal artikal1 = new Artikal("Cevapi",200, Tip.JELO,50,"Narodno jelo od mlevenog mesa juneceg porekla");
+        Artikal artikal1 = new Artikal("Cevapi",200, Tip.JELO,50,"Narodno jelo od mlevenog mesa juneceg porekla");
         Artikal artikal2 = new Artikal("Pljeskavica",150,Tip.JELO,20,"ide gas");
+
+        artikalRepository.save(artikal1);
+        artikalRepository.save(artikal2);
 
         Set<Artikal> artikli = new HashSet<>();
         artikli.add(artikal1);
@@ -64,7 +67,21 @@ public class DatabaseConfiguration
 
 
 
+        Menadzer aleksa = new Menadzer("popara", "popara123", "Aleksa", "Lukac", "M", new Date());
+        menadzerRepository.save(aleksa);
 
+        Restoran restoran = new Restoran(aleksa,"Siki");
+        restoranRepository.save(restoran);
+
+        restoran.setArtikli(artikli);
+        restoranRepository.save(restoran);
+
+        artikal1.setRestoran(restoran);
+
+        artikalRepository.save(artikal1);
+        artikalRepository.save(artikal2);
+
+        /*
         Menadzer aleksa = new Menadzer("popara", "popara123", "Aleksa", "Lukac", "M", new Date());
         menadzerRepository.save(aleksa);
         Kupac nikola = new Kupac("cveya","cveya123","Nikola","Cvejic","M", new Date(),porudzbine,20);

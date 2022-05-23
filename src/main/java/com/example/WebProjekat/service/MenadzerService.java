@@ -3,6 +3,7 @@ package com.example.WebProjekat.service;
 import com.example.WebProjekat.entity.Kupac;
 import com.example.WebProjekat.entity.Menadzer;
 import com.example.WebProjekat.entity.Porudzbina;
+import com.example.WebProjekat.entity.Status;
 import com.example.WebProjekat.repository.MenadzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,21 @@ public class MenadzerService
 
         return menadzer;
     }
+
+    public boolean PromeniStatus(Porudzbina porudzbina, Status status)
+    {
+        if(status!=Status.U_PRIPREMI || status!=Status.CEKA_DOSTAVLJACA)
+        {
+            return false;
+        }
+
+        else
+        {
+            porudzbina.setStatus(status);
+        }
+
+        return true;
+    }
+
 
 }

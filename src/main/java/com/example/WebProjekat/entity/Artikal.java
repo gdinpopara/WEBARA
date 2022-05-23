@@ -1,27 +1,27 @@
 package com.example.WebProjekat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 ;import java.util.HashSet;
 import java.util.Set;
 
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 @Entity
 public class Artikal
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Porudzbina porudzbina;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Restoran restoran;
 
-    @OneToMany(mappedBy = "artikal",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "artikal",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
 
-    @Column
+    @Id
     private String naziv;
 
     @Column
@@ -102,5 +102,21 @@ public class Artikal
 
     public void setOpis(String opis) {
         this.opis = opis;
+    }
+
+    public Porudzbina getPorudzbina() {
+        return porudzbina;
+    }
+
+    public void setPorudzbina(Porudzbina porudzbina) {
+        this.porudzbina = porudzbina;
+    }
+
+    public Restoran getRestoran() {
+        return restoran;
+    }
+
+    public void setRestoran(Restoran restoran) {
+        this.restoran = restoran;
     }
 }

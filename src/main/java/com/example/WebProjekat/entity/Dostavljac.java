@@ -20,7 +20,7 @@ public class Dostavljac extends Korisnik
 
     public Dostavljac(){}
 
-    @OneToMany(mappedBy = "dostavljac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dostavljac", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Porudzbina> porudzbine = new HashSet<>();
 
     public Set<Porudzbina> getPorudzbine() {

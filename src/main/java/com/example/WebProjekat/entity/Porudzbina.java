@@ -16,10 +16,9 @@ public class Porudzbina {
 
     public Porudzbina(){}
 
-    public Porudzbina(UUID id, Dostavljac dostavljac, Set<Artikal> artikli, Kupac kupac, Set<PoruceniArtikli> poruceniArtikli, Restoran restoranPoruceno, Date datumIVremePorudzbine, double cena, String kupacIme, Status status) {
+    public Porudzbina(UUID id, Dostavljac dostavljac, Kupac kupac, Set<PoruceniArtikli> poruceniArtikli, Restoran restoranPoruceno, Date datumIVremePorudzbine, double cena, String kupacIme, Status status) {
         this.id = id;
         this.dostavljac = dostavljac;
-        this.artikli = artikli;
         this.kupac = kupac;
         this.poruceniArtikli = poruceniArtikli;
         this.restoranPoruceno = restoranPoruceno;
@@ -27,6 +26,7 @@ public class Porudzbina {
         this.cena = cena;
         this.kupacIme = kupacIme;
         this.status = status;
+        this.ukupnaCena = 0;
     }
 
     @Id
@@ -36,13 +36,10 @@ public class Porudzbina {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Dostavljac dostavljac;
 
-    @OneToMany(mappedBy = "porudzbina", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Artikal> artikli = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Kupac kupac;
 
-    @OneToMany(mappedBy = "porudzbina", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "porudzbina", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
 
     @OneToOne
@@ -60,6 +57,9 @@ public class Porudzbina {
     @Column
     private Status status;
 
+    @Column
+    private double ukupnaCena;
+
     public UUID getId() {
         return id;
     }
@@ -69,6 +69,10 @@ public class Porudzbina {
     }
 
 
+    public void dodajPoruceniArtikal(PoruceniArtikli pa)
+    {
+        poruceniArtikli.add(pa);
+    }
 
     public Set<PoruceniArtikli> getPoruceniArtikli() {
         return poruceniArtikli;

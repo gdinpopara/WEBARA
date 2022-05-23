@@ -62,7 +62,7 @@ public class AdminRestController
 
         menadzerService.dodajMenadzera(menadzer);
 
-        return new ResponseEntity("Admin nije logovan!",HttpStatus.OK);
+        return new ResponseEntity("Menadzer dodat!",HttpStatus.OK);
     }
 
     @PostMapping("/api/admin/dodaj-dostavljac")
@@ -71,7 +71,7 @@ public class AdminRestController
         admin logovaniAdmin = (admin) session.getAttribute("admin");
 
         if(logovaniAdmin == null) {
-            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Dostavljac dodat!",HttpStatus.FORBIDDEN);
         }
 
         dostavljacService.dodajDostavljaca(dostavljac);
