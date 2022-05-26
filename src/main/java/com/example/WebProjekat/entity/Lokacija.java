@@ -1,7 +1,9 @@
 package com.example.WebProjekat.entity;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 @Entity
 public class Lokacija
 {

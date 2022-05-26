@@ -1,5 +1,6 @@
 package com.example.WebProjekat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -11,15 +12,18 @@ import java.util.Set;
 @Entity
 public class Artikal
 {
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Porudzbina porudzbina;
+//    @ManyToOne
+//    private Porudzbina porudzbina;
 
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JsonIgnore
     private Restoran restoran;
 
-    @OneToMany(mappedBy = "artikal",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
+    @OneToOne(mappedBy = "artikal")
+    private PoruceniArtikli poruceniArtikli;
+
+    @ManyToOne
+    private Korpa korpa;
 
     @Id
     private String naziv;
@@ -28,6 +32,7 @@ public class Artikal
     private double cena;
 
     @Column
+    @JsonIgnore
     private Tip tip;
 
     @Column
@@ -56,13 +61,13 @@ public class Artikal
     }
 
 
-    public Set<PoruceniArtikli> getPoruceniArtikli() {
-        return poruceniArtikli;
-    }
-
-    public void setPoruceniArtikli(Set<PoruceniArtikli> poruceniArtikli) {
-        this.poruceniArtikli = poruceniArtikli;
-    }
+//    public Set<PoruceniArtikli> getPoruceniArtikli() {
+//        return poruceniArtikli;
+//    }
+//
+//    public void setPoruceniArtikli(Set<PoruceniArtikli> poruceniArtikli) {
+//        this.poruceniArtikli = poruceniArtikli;
+//    }
 
     public String getNaziv() {
         return naziv;
@@ -104,13 +109,13 @@ public class Artikal
         this.opis = opis;
     }
 
-    public Porudzbina getPorudzbina() {
-        return porudzbina;
-    }
-
-    public void setPorudzbina(Porudzbina porudzbina) {
-        this.porudzbina = porudzbina;
-    }
+//    public Porudzbina getPorudzbina() {
+//        return porudzbina;
+//    }
+//
+//    public void setPorudzbina(Porudzbina porudzbina) {
+//        this.porudzbina = porudzbina;
+//    }
 
     public Restoran getRestoran() {
         return restoran;

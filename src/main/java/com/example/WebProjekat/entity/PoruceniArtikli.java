@@ -1,7 +1,12 @@
 package com.example.WebProjekat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 @Entity
 public class PoruceniArtikli
 {
@@ -9,31 +14,25 @@ public class PoruceniArtikli
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private Artikal artikal;
 
     @ManyToOne
+    //@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JsonIgnore
     private Porudzbina porudzbina;
 
     @Column
     private int kolicina;
 
-    @Column
-    private double ukupnaCena;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Korpa korpa;
-
 
     public PoruceniArtikli() {
     }
 
-    public PoruceniArtikli(Long id, Artikal artikal, Porudzbina porudzbina, int kolicina, double ukupnaCena) {
-        this.id = id;
+    public PoruceniArtikli(Artikal artikal, Porudzbina porudzbina, int kolicina) {
         this.artikal = artikal;
         this.porudzbina = porudzbina;
-        this.kolicina = kolicina;
-        this.ukupnaCena = ukupnaCena;
+        this.kolicina = kolicina;;
     }
 
     public Long getId() {
@@ -68,11 +67,4 @@ public class PoruceniArtikli
         this.kolicina = kolicina;
     }
 
-    public double getUkupnaCena() {
-        return ukupnaCena;
-    }
-
-    public void setUkupnaCena(double ukupnaCena) {
-        this.ukupnaCena = ukupnaCena;
-    }
 }

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
-enum Uloga{ADMIN,MENADZER,DOSTAVLJAC,KUPAC};
+;
 
 @Entity
 public class Korisnik

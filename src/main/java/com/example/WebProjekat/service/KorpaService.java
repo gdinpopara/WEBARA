@@ -1,6 +1,7 @@
 package com.example.WebProjekat.service;
 
 import com.example.WebProjekat.dto.KorpaDto;
+import com.example.WebProjekat.dto.PovecajSmanjiDTO;
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.ArtikalRepository;
 import com.example.WebProjekat.repository.KorpaRepository;
@@ -18,22 +19,22 @@ public class KorpaService {
     @Autowired
     private ArtikalRepository artikalRepository;
 
+
     public boolean dodajUKorpu(Kupac kupac, KorpaDto korpaDto) {
 
         if (kupac.getKorpa()==null)
         {
-            Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
+            Set<Artikal> artikals = new HashSet<>();
 
             Artikal artikal = new Artikal();
             artikal = artikalRepository.getById(korpaDto.getIDartikal());
 
-            PoruceniArtikli pa = new PoruceniArtikli();
-            pa.setArtikal(artikal);
-            pa.setKolicina(korpaDto.getKolicina());
+            artikal.setKolicina(korpaDto.getKolicina());
+            double ukupnaCena = korpaDto.getKolicina()*artikal.getCena();
 
-            poruceniArtikli.add(pa);
+            artikals.add(artikal);
 
-            Korpa korpa = new Korpa(kupac,poruceniArtikli);
+            Korpa korpa = new Korpa(kupac,artikals,ukupnaCena);
 
             kupac.setKorpa(korpa);
             korpaRepository.save(korpa);
@@ -42,32 +43,52 @@ public class KorpaService {
 
         else
         {
-            Korpa k = kupac.getKorpa();
-            for (PoruceniArtikli pa : k.getPoruceniArtikli()) {
-                Artikal a = pa.getArtikal();
-                if (korpaDto.getIDartikal() == a.getNaziv()) {
-                    k.azuriraj(korpaDto.getKolicina(), a);
-                    korpaRepository.save(k);
-
-                    return true;
-                }
-            }// resiti restoran nekako
+              Korpa k = kupac.getKorpa();
+              double ukupnaCena = k.getUkupnaCena();
 
 
-            Set<PoruceniArtikli> poruceniArtikli = new HashSet<>();
-            poruceniArtikli = k.getPoruceniArtikli();
+              for (Artikal artikal:k.getArtikli())
+              {
+                  if(korpaDto.getIDartikal().equals(artikal.getNaziv()))
+                  {
+                      Set<Artikal> artikals = new HashSet<>();
+                      artikals = k.getArtikli();
+                      int kol = artikal.getKolicina();
+                      artikals.remove(artikal);
+
+                      Artikal artikall = new Artikal();
+                      artikall = artikalRepository.getById(korpaDto.getIDartikal());
+
+                      artikall.setKolicina(korpaDto.getKolicina()+kol);
+                      ukupnaCena-=kol*artikall.getCena();
+                      ukupnaCena+=artikall.getCena()*(korpaDto.getKolicina()+kol);
+
+                      artikals.add(artikall);
+
+                      k.setArtikli(artikals);
+                      k.setUkupnaCena(ukupnaCena);
+                      korpaRepository.save(k);
+
+                      return true;
+                  }
+              }
+
+
+            Set<Artikal> artikals = new HashSet<>();
+
+            artikals = k.getArtikli();
 
 
             Artikal artikal = new Artikal();
             artikal = artikalRepository.getById(korpaDto.getIDartikal());
 
-            PoruceniArtikli pa = new PoruceniArtikli();
-            pa.setArtikal(artikal);
-            pa.setKolicina(korpaDto.getKolicina());
+            artikal.setKolicina(korpaDto.getKolicina());
+            ukupnaCena+=artikal.getCena()*korpaDto.getKolicina();
 
-            poruceniArtikli.add(pa);
+            artikals.add(artikal);
 
-            k.setPoruceniArtikli(poruceniArtikli);
+            k.setArtikli(artikals);
+            k.setUkupnaCena(ukupnaCena);
             korpaRepository.save(k);
             return true;
         }
@@ -77,4 +98,121 @@ public class KorpaService {
     {
         return kupac.getKorpa();
     }
+
+    public Korpa izbaciIzKorpe(Kupac kupac, String nazivArtikla)
+    {
+        if (kupac.getKorpa()==null)
+        {
+            return kupac.getKorpa();
+        }
+
+        else
+        {
+            Korpa korpa = kupac.getKorpa();
+            Set<Artikal> artikli = korpa.getArtikli();
+            for (Artikal artikal:artikli)
+            {
+                if(artikal.getNaziv().equals(nazivArtikla))
+                {
+                    int kol = artikal.getKolicina();
+                    double cena = artikal.getCena();
+                    artikli.remove(artikal);
+                    korpa.setArtikli(artikli);
+                    double novaCena = korpa.getUkupnaCena() - kol*cena;
+                    korpa.setUkupnaCena(novaCena);
+                    korpaRepository.save(korpa);
+                    return korpa;
+                }
+            }
+        }
+
+        return kupac.getKorpa();
+    }
+
+    public Korpa povecaj(Kupac kupac, PovecajSmanjiDTO povecajSmanjiDTO)
+    {
+        if (kupac.getKorpa()==null)
+        {
+            return kupac.getKorpa();
+        }
+        else
+        {
+            Korpa korpa = kupac.getKorpa();
+            Set<Artikal> artikli = korpa.getArtikli();
+            for (Artikal artikal:artikli)
+            {
+                if(artikal.getNaziv().equals(povecajSmanjiDTO.getNazivArtikla()))
+                {
+                    Artikal izmenjeniArtikal = artikal;
+                    int kol = povecajSmanjiDTO.getKolicina();
+                    int novaKol = kol + artikal.getKolicina();
+
+                    double cena = artikal.getCena();
+                    double novaCena = korpa.getUkupnaCena() + kol*cena;
+
+                    izmenjeniArtikal.setKolicina(novaKol);
+                    korpa.setUkupnaCena(novaCena);
+
+                    Set<Artikal> izmenjeniArtikli = new HashSet<>();
+                    izmenjeniArtikli = artikli;
+                    izmenjeniArtikli.remove(artikal);
+                    izmenjeniArtikli.add(izmenjeniArtikal);
+
+                    korpa.setArtikli(izmenjeniArtikli);
+
+                    korpaRepository.save(korpa);
+                    return korpa;
+                }
+            }
+        }
+
+        return kupac.getKorpa();
+    }
+
+    public Korpa smanji(Kupac kupac, PovecajSmanjiDTO povecajSmanjiDTO)
+    {
+        if (kupac.getKorpa()==null)
+        {
+            return kupac.getKorpa();
+        }
+        else
+        {
+            Korpa korpa = kupac.getKorpa();
+            Set<Artikal> artikli = korpa.getArtikli();
+            for (Artikal artikal:artikli)
+            {
+                if(artikal.getNaziv().equals(povecajSmanjiDTO.getNazivArtikla()))
+                {
+                    Artikal izmenjeniArtikal = artikal;
+                    int kol = povecajSmanjiDTO.getKolicina();
+                    int novaKol = artikal.getKolicina()-kol;
+
+                    if(novaKol<=0)
+                    {
+                        return korpa;
+                    }
+
+                    double cena = artikal.getCena();
+                    double novaCena = korpa.getUkupnaCena() - kol*cena;
+
+                    izmenjeniArtikal.setKolicina(novaKol);
+                    korpa.setUkupnaCena(novaCena);
+
+                    Set<Artikal> izmenjeniArtikli = new HashSet<>();
+                    izmenjeniArtikli = artikli;
+                    izmenjeniArtikli.remove(artikal);
+                    izmenjeniArtikli.add(izmenjeniArtikal);
+
+                    korpa.setArtikli(izmenjeniArtikli);
+
+                    korpaRepository.save(korpa);
+                    return korpa;
+                }
+            }
+        }
+
+        return kupac.getKorpa();
+    }
+
+
 }

@@ -1,7 +1,7 @@
 package com.example.WebProjekat.service;
 
-import com.example.WebProjekat.entity.Kupac;
-import com.example.WebProjekat.entity.Porudzbina;
+import com.example.WebProjekat.dto.izmenaDto;
+import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.KupacRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ public class KupacService
 
     public Kupac save(Kupac kupac)
     {
+        kupac.setUloga(Uloga.KUPAC);
         return kupacRepository.save(kupac);
     }
 
@@ -38,5 +39,33 @@ public class KupacService
         Kupac kupac = kupacRepository.getById(username);
 
         return kupac.getPorudzbine();
+    }
+
+    public Kupac izmena(izmenaDto izmenadto, Kupac kupac)
+    {
+        if(!izmenadto.getIme().isEmpty())
+        {
+            kupac.setIme(izmenadto.getIme());
+        }
+
+        if(!izmenadto.getPrezime().isEmpty())
+        {
+            kupac.setPrezime(izmenadto.getPrezime());
+        }
+
+        if(!izmenadto.getPol().isEmpty())
+        {
+            kupac.setPol(izmenadto.getPol());
+        }
+
+        if(!(izmenadto.getDatumRodjenja()==null))
+        {
+            kupac.setDatumRodjenja(izmenadto.getDatumRodjenja());
+        }
+
+        kupacRepository.save(kupac);
+
+        return kupac;
+
     }
 }

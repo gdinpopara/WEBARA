@@ -30,19 +30,21 @@ public class Kupac extends Korisnik
     {}
 
     @OneToMany(mappedBy = "kupac",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Porudzbina> porudzbine = new HashSet<>();
 
     @Column
     private int brojBodova;
 
+    //
     @ManyToOne
     private TipKupca tipKupca;
 
     @OneToMany(mappedBy = "kupac",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Komentar> komentari = new HashSet<>();
 
-    //@JsonIgnore
     @OneToOne(mappedBy = "kupac",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Korpa korpa;
 
     public Set<Porudzbina> getPorudzbine() {

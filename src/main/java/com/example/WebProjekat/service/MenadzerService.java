@@ -1,14 +1,14 @@
 package com.example.WebProjekat.service;
 
-import com.example.WebProjekat.entity.Kupac;
-import com.example.WebProjekat.entity.Menadzer;
-import com.example.WebProjekat.entity.Porudzbina;
-import com.example.WebProjekat.entity.Status;
+import com.example.WebProjekat.dto.izmenaDto;
+import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.MenadzerRepository;
+import com.example.WebProjekat.repository.PorudzbinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class MenadzerService
@@ -16,8 +16,12 @@ public class MenadzerService
     @Autowired
     private MenadzerRepository menadzerRepository;
 
+    @Autowired
+    private PorudzbinaRepository porudzbinaRepository;
+
     public String dodajMenadzera(Menadzer menadzer)
     {
+        menadzer.setUloga(Uloga.MENADZER);
         menadzerRepository.save(menadzer);
         return "Uspesno dodat menadzer!";
     }
@@ -33,19 +37,32 @@ public class MenadzerService
         return menadzer;
     }
 
-    public boolean PromeniStatus(Porudzbina porudzbina, Status status)
+    public Menadzer izmena(izmenaDto izmenadto, Menadzer menadzer)
     {
-        if(status!=Status.U_PRIPREMI || status!=Status.CEKA_DOSTAVLJACA)
+        if(!izmenadto.getIme().isEmpty())
         {
-            return false;
+            menadzer.setIme(izmenadto.getIme());
         }
 
-        else
+        if(!izmenadto.getPrezime().isEmpty())
         {
-            porudzbina.setStatus(status);
+            menadzer.setPrezime(izmenadto.getPrezime());
         }
 
-        return true;
+        if(!izmenadto.getPol().isEmpty())
+        {
+            menadzer.setPol(izmenadto.getPol());
+        }
+
+        if(!(izmenadto.getDatumRodjenja()==null))
+        {
+            menadzer.setDatumRodjenja(izmenadto.getDatumRodjenja());
+        }
+
+        menadzerRepository.save(menadzer);
+
+        return menadzer;
+
     }
 
 

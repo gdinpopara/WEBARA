@@ -1,21 +1,22 @@
 package com.example.WebProjekat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 @Entity
 public class Restoran
 {
-
-
-
+    //
     @OneToOne
     private Menadzer menadzer;
 
-    @OneToOne(mappedBy = "restoranPoruceno")
+    @OneToOne(mappedBy = "restoranPoruceno",fetch = FetchType.EAGER)
+    @JsonIgnore
     private Porudzbina porudzbina;
 
     @OneToMany(mappedBy = "restoran", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -31,6 +32,7 @@ public class Restoran
     private boolean radi;
 
     @OneToMany(mappedBy = "restoran",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Artikal> artikli = new HashSet<>();
 
     @OneToOne(mappedBy = "restoran")

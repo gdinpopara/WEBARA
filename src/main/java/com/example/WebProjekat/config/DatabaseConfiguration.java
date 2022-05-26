@@ -77,9 +77,16 @@ public class DatabaseConfiguration
         restoranRepository.save(restoran);
 
         artikal1.setRestoran(restoran);
+        artikal2.setRestoran(restoran);
+
+        artikal1.setCena(300);
+        artikal2.setCena(400);
 
         artikalRepository.save(artikal1);
         artikalRepository.save(artikal2);
+
+        restoran.setMenadzer(aleksa);
+        restoranRepository.save(restoran);
 
         /*
         Menadzer aleksa = new Menadzer("popara", "popara123", "Aleksa", "Lukac", "M", new Date());

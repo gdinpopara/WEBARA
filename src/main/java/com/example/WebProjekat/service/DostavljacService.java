@@ -1,9 +1,7 @@
 package com.example.WebProjekat.service;
 
-import com.example.WebProjekat.entity.Dostavljac;
-import com.example.WebProjekat.entity.Kupac;
-import com.example.WebProjekat.entity.Porudzbina;
-import com.example.WebProjekat.entity.admin;
+import com.example.WebProjekat.dto.izmenaDto;
+import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.DostavljacRepository;
 import com.example.WebProjekat.repository.PorudzbinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class DostavljacService
@@ -24,6 +23,7 @@ public class DostavljacService
 
     public String dodajDostavljaca(Dostavljac dostavljac)
     {
+        dostavljac.setUloga(Uloga.DOSTAVLJAC);
         dostavljacRepository.save(dostavljac);
         return "Uspesno dodat dostavljac!";
     }
@@ -44,6 +44,34 @@ public class DostavljacService
         Dostavljac dostavljac = dostavljacRepository.getById(username);
 
         return dostavljac.getPorudzbine();
+    }
+
+    public Dostavljac izmena(izmenaDto izmenadto, Dostavljac dostavljac)
+    {
+        if(!izmenadto.getIme().isEmpty())
+        {
+            dostavljac.setIme(izmenadto.getIme());
+        }
+
+        if(!izmenadto.getPrezime().isEmpty())
+        {
+            dostavljac.setPrezime(izmenadto.getPrezime());
+        }
+
+        if(!izmenadto.getPol().isEmpty())
+        {
+            dostavljac.setPol(izmenadto.getPol());
+        }
+
+        if(!(izmenadto.getDatumRodjenja()==null))
+        {
+            dostavljac.setDatumRodjenja(izmenadto.getDatumRodjenja());
+        }
+
+        dostavljacRepository.save(dostavljac);
+
+        return dostavljac;
+
     }
 
 

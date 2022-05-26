@@ -1,10 +1,7 @@
 package com.example.WebProjekat.controller;
 
 import com.example.WebProjekat.dto.LoginDto;
-import com.example.WebProjekat.entity.Dostavljac;
-import com.example.WebProjekat.entity.Kupac;
-import com.example.WebProjekat.entity.Menadzer;
-import com.example.WebProjekat.entity.admin;
+import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.AdminRepository;
 import com.example.WebProjekat.service.AdminService;
 import com.example.WebProjekat.service.DostavljacService;
@@ -14,11 +11,13 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.Set;
 
 @RestController
 public class AdminRestController
@@ -76,7 +75,7 @@ public class AdminRestController
 
         dostavljacService.dodajDostavljaca(dostavljac);
 
-        return new ResponseEntity("Admin nije logovan!",HttpStatus.OK);
+        return new ResponseEntity("Dostavljac dodat!",HttpStatus.OK);
     }
 
     @PostMapping("/api/admin/logout")
@@ -91,6 +90,19 @@ public class AdminRestController
 
         session.invalidate();
         return new ResponseEntity("Admin odjavljen!",HttpStatus.OK);
+    }
+
+    @GetMapping("/api/admin/pregled-korisnika")
+    public ResponseEntity<Set<Korisnik>> sviKorisnici(HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin==null)
+        {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(adminService.dobaviKorisnike());
     }
 
 
