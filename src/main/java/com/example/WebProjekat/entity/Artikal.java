@@ -53,11 +53,11 @@ public class Artikal
 
     public Artikal()
     {
-        this.naziv = "Mleko";
-        this.cena = 100;
-        this.tip = Tip.PICE;
-        this.kolicina = 100;
-        this.opis = "Mleko brt";
+//        this.naziv = "Mleko";
+//        this.cena = 100;
+//        this.tip = Tip.PICE;
+//        this.kolicina = 100;
+//        this.opis = "Mleko brt";
     }
 
 

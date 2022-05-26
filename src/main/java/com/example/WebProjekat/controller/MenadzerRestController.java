@@ -1,5 +1,7 @@
 package com.example.WebProjekat.controller;
 
+import com.example.WebProjekat.dto.ArtikalDto;
+import com.example.WebProjekat.dto.IzmenaArtiklaDto;
 import com.example.WebProjekat.dto.LoginDto;
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.service.MenadzerService;
@@ -119,4 +121,60 @@ public class MenadzerRestController
 
         return ResponseEntity.ok(restorani);
     }
+
+    @PostMapping("/api/menadzer/restoran/dodaj-artikal")
+    public ResponseEntity<Set<Artikal>> dodajArtikalURestoran(@RequestBody ArtikalDto artikalDto, HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        if(artikalDto.getNaziv().isEmpty())
+        {
+            return new ResponseEntity("Naziv je obavezan!",HttpStatus.BAD_REQUEST);
+        }
+
+        if(artikalDto.getCena()==0)
+        {
+            return new ResponseEntity("Cena je obavezna!",HttpStatus.BAD_REQUEST);
+        }
+
+        if(artikalDto.getTip()==null)
+        {
+            return new ResponseEntity("Tip je obavezan!",HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(menadzerService.dodajURestoran(logovaniMenadzer,artikalDto));
+    }
+
+    @DeleteMapping("/api/menadzer/restoran/obrisi-artikal")
+    public ResponseEntity<Set<Artikal>> obrisiArtikal(@RequestParam String naziv, HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(menadzerService.azurirajIzRestorana(logovaniMenadzer,naziv));
+    }
+
+    @PostMapping("/api/menadzer/restoran/izmeni-artikal")
+    public ResponseEntity<Artikal> izmeniArtikal(@RequestParam String naziv, @RequestBody IzmenaArtiklaDto izmenaArtiklaDto, HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(menadzerService.obrisiIzRestorana(logovaniMenadzer,izmenaArtiklaDto,naziv));
+
+    }
+
 }

@@ -1,6 +1,3 @@
 package com.example.WebProjekat.entity;
 
-public enum Tip {
-    JELO,
-    PICE
-}
+public enum Tip {JELO, PICE}

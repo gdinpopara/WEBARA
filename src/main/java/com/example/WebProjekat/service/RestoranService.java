@@ -36,7 +36,7 @@ public class RestoranService {
         Set<Restoran> vrati = new HashSet<>();
         for (Restoran r:restorani)
         {
-            if(r.getNaziv()==naziv)
+            if(r.getNaziv().equals(naziv))
             {
                 vrati.add(r);
             }
@@ -49,7 +49,7 @@ public class RestoranService {
         Set<Restoran> vrati = new HashSet<>();
         for (Restoran r:restorani)
         {
-            if(r.getTip()==tip)
+            if(r.getTip().equals(tip))
             {
                 vrati.add(r);
             }
