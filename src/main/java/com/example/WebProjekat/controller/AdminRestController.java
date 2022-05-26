@@ -11,10 +11,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Set;
@@ -62,6 +59,25 @@ public class AdminRestController
         menadzerService.dodajMenadzera(menadzer);
 
         return new ResponseEntity("Menadzer dodat!",HttpStatus.OK);
+    }
+    @GetMapping("/api/admin/dodeli-menadzera")
+    public ResponseEntity dodeliM(@RequestParam String korisnickoIme, HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Restoran restoran = restoranRepository.getById(id);
+
+        if (restoran == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Restoran ne postoji.");
+        }
+
+        Menadzer menadzer = menadzerRepository.getById(korisnickoIme);
+        menadzer.setZaduzenRestoran(restoran);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
     }
 
     @PostMapping("/api/admin/dodaj-dostavljac")
