@@ -41,7 +41,7 @@ public class PorudzbinaService
                 vrati.add(p);
             }
         }
-        return vrati;
+        return vrati;//asd
     }
 
     public Set<Porudzbina> porudzbineRestorana(Menadzer menadzer)
