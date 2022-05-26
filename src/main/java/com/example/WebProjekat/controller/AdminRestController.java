@@ -6,6 +6,7 @@ import com.example.WebProjekat.repository.AdminRepository;
 import com.example.WebProjekat.service.AdminService;
 import com.example.WebProjekat.service.DostavljacService;
 import com.example.WebProjekat.service.MenadzerService;
+import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ public class AdminRestController
 
     @Autowired
     DostavljacService dostavljacService;
+
+    @Autowired
+    RestoranService restoranService;
 
     @PostMapping("/api/admin/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
@@ -93,6 +97,19 @@ public class AdminRestController
 
         return new ResponseEntity("Dostavljac dodat!",HttpStatus.OK);
     }
+    @PostMapping("/api/admin/dodaj-restoran")
+    public ResponseEntity dodajR(@RequestBody Restoran restoran, HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        restoranService.dodajRestoran(restoran);
+
+        return new ResponseEntity("Uspesno dodavanje!",HttpStatus.OK);
+    }
 
     @PostMapping("/api/admin/logout")
     public ResponseEntity logout(HttpSession session)
@@ -119,6 +136,54 @@ public class AdminRestController
         }
 
         return ResponseEntity.ok(adminService.dobaviKorisnike());
+    }
+    @GetMapping("/api/admin/restorani")
+    public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.spisakRestorana();
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/admin/pretragarpn")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv ,HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(naziv);
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/admin/pretragarpt")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoTipu(@RequestParam String tip ,HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(tip);
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/admin/pretragarpl")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoLokaciji(@RequestBody Lokacija lokacija , HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoLokaciji(lokacija);
+
+        return ResponseEntity.ok(restorani);
     }
 
 
