@@ -103,7 +103,7 @@ public class MenadzerRestController
         if(logovaniMenadzer == null) {
             return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
         }
-        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(tip);
+        Set<Restoran> restorani = restoranService.pretraziRpoTipu(tip);
 
         return ResponseEntity.ok(restorani);
     }

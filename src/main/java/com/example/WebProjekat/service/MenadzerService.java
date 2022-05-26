@@ -1,5 +1,6 @@
 package com.example.WebProjekat.service;
 
+import com.example.WebProjekat.dto.KorpaDto;
 import com.example.WebProjekat.dto.izmenaDto;
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.MenadzerRepository;
@@ -7,6 +8,7 @@ import com.example.WebProjekat.repository.PorudzbinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -64,6 +66,26 @@ public class MenadzerService
         return menadzer;
 
     }
+    public boolean dodajArtikal(Menadzer menadzer, KorpaDto korpaDto) {
+
+        if (kupac.getKorpa()==null)
+        {
+            Set<Artikal> artikals = new HashSet<>();
+
+            Artikal artikal = new Artikal();
+            artikal = artikalRepository.getById(korpaDto.getIDartikal());
+
+            artikal.setKolicina(korpaDto.getKolicina());
+            double ukupnaCena = korpaDto.getKolicina()*artikal.getCena();
+
+            artikals.add(artikal);
+
+            Korpa korpa = new Korpa(kupac,artikals,ukupnaCena);
+
+            kupac.setKorpa(korpa);
+            korpaRepository.save(korpa);
+            return true;
+        }
 
 
 }

@@ -176,7 +176,7 @@ public class AdminRestController
         if(logovaniAdmin == null) {
             return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
         }
-        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(tip);
+        Set<Restoran> restorani = restoranService.pretraziRpoTipu(tip);
 
         return ResponseEntity.ok(restorani);
     }

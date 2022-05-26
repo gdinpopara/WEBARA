@@ -123,7 +123,7 @@ public class DostavljacRestController
         if(logovaniDostavljac == null) {
             return new ResponseEntity("Dostavljac nije logovan!",HttpStatus.FORBIDDEN);
         }
-        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(tip);
+        Set<Restoran> restorani = restoranService.pretraziRpoTipu(tip);
 
         return ResponseEntity.ok(restorani);
     }
