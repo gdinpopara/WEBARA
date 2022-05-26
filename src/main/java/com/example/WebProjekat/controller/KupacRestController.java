@@ -190,6 +190,53 @@ public class KupacRestController
 
         return ResponseEntity.ok(porudzbina);
     }
+    @GetMapping("/api/kupac/restorani")
+    public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
 
+        if(logovaniKupac == null) {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.spisakRestorana();
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/kupac/pretragarpn")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac == null) {
+            return new ResponseEntity("Kupac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(naziv);
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/kupac/pretragarpt")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoTipu(@RequestParam String tip ,HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac == null) {
+            return new ResponseEntity("Kupac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(tip);
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/kupac/pretragarpl")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoLokaciji(@RequestBody Lokacija lokacija , HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac == null) {
+            return new ResponseEntity("Kupac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoLokaciji(lokacija);
+
+        return ResponseEntity.ok(restorani);
+    }
 
 }
