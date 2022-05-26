@@ -7,10 +7,7 @@ import com.example.WebProjekat.service.PorudzbinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Set;
@@ -89,5 +86,53 @@ public class DostavljacRestController
 
         session.invalidate();
         return new ResponseEntity("Dostavljac je odjavljen!",HttpStatus.OK);
+    }
+    @GetMapping("/api/dostavljac/restorani")
+    public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
+    {
+        Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
+
+        if(logovaniDostavljac == null) {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.spisakRestorana();
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/dostavljac/pretragarpn")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
+    {
+        Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
+
+        if(logovaniDostavljac == null) {
+            return new ResponseEntity("Dostavljac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(naziv);
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/dostavljac/pretragarpt")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoTipu(@RequestParam String tip ,HttpSession session)
+    {
+        Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
+
+        if(logovaniDostavljac == null) {
+            return new ResponseEntity("Dostavljac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoNazivu(tip);
+
+        return ResponseEntity.ok(restorani);
+    }
+    @GetMapping("/api/dostavljac/pretragarpl")
+    public ResponseEntity<Set<Restoran>> pretraziRestoranPoLokaciji(@RequestBody Lokacija lokacija , HttpSession session)
+    {
+        Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
+
+        if(logovaniDostavljac == null) {
+            return new ResponseEntity("Dostavljac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+        Set<Restoran> restorani = restoranService.pretraziRpoLokaciji(lokacija);
+
+        return ResponseEntity.ok(restorani);
     }
 }

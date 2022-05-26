@@ -3,6 +3,8 @@ package com.example.WebProjekat.controller;
 import com.example.WebProjekat.dto.LoginDto;
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.AdminRepository;
+import com.example.WebProjekat.repository.MenadzerRepository;
+import com.example.WebProjekat.repository.RestoranRepository;
 import com.example.WebProjekat.service.AdminService;
 import com.example.WebProjekat.service.DostavljacService;
 import com.example.WebProjekat.service.MenadzerService;
@@ -32,6 +34,11 @@ public class AdminRestController
     @Autowired
     RestoranService restoranService;
 
+    @Autowired
+    RestoranRepository restoranRepository;
+
+    @Autowired
+    MenadzerRepository menadzerRepository;
     @PostMapping("/api/admin/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
     {
