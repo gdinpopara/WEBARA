@@ -4,6 +4,7 @@ import com.example.WebProjekat.dto.LoginDto;
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.service.DostavljacService;
 import com.example.WebProjekat.service.PorudzbinaService;
+import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class DostavljacRestController
 
     @Autowired
     private PorudzbinaService porudzbinaService;
+
+    @Autowired
+    private RestoranService restoranService;
 
     @PostMapping("/api/dostavljac/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)

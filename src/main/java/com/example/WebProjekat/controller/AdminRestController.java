@@ -79,7 +79,7 @@ public class AdminRestController
         if(logovaniAdmin == null) {
             return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
         }
-        Restoran restoran = restoranRepository.getById(id);
+        Restoran restoran = restoranRepository.getById(korisnickoIme);
 
         if (restoran == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Restoran ne postoji.");
