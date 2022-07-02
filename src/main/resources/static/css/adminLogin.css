@@ -29,3 +29,21 @@ user agent stylesheet
 div {
     display: block;
 }
+div.form
+{
+    display: block;
+    text-align: center;
+}
+form
+{
+    display: inline-block;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: left;
+}
+dugme{
+    margin-left:10%;
+}
+.loginlink{
+    text-align:center;
+}

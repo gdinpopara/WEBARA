@@ -5,26 +5,72 @@
     <title>Registracija</title>
     <script src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/kupacVue.js"></script>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/adminLogin.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
 </head>
 <body>
-    <form id="register">
-        <label for="korisnickoIme">Korisnicko ime:</label>
-        <input id="korisnickoIme" type="text"/><br>
-        <label for="lozinka">Lozinka:</label>
-        <input id="lozinka" type="text"/><br>
-        <label for="ime">Ime:</label>
-        <input id="ime" type="text"/><br>
-        <label for="prezime">Prezime:</label>
-        <input id="prezime" type="text"/><br>
-        <label for="pol">Pol:</label>
-        <input id="pol" type="text"/><br>
-        <label for="datumRodjenja">Datum rodjenja:</label>
-        <input id="datumRodjenja" type="date"/><br>
-        <input type="submit" value="Add">
-    </form>
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img class="bi me-2 size"  src="../assets/lanch.png">
+            </a>
 
-    <a href="loginKupac.html">Login page</a>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control form-control-dark text-white bg-dark" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-light me-2">Login</button>
+                <button type="button" class="btn btn-warning">Sign-up</button>
+            </div>
+        </div>
+    </div>
+</header>
+<br><br><br><br>
+<div class="form">
+    <form id="register">
+    <label for="korisnickoIme">Korisnicko ime:</label>
+    <input id="korisnickoIme" type="text"/><br>
+    <label for="lozinka">Lozinka:</label>
+    <input id="lozinka" type="text"/><br>
+    <label for="ime">Ime:</label>
+    <input id="ime" type="text"/><br>
+    <label for="prezime">Prezime:</label>
+    <input id="prezime" type="text"/><br>
+    <label for="pol">Pol:</label>
+    <input id="pol" type="text"/><br>
+    <label for="datumRodjenja">Datum rodjenja:</label>
+    <input id="datumRodjenja" type="date"/><br>
+    <input type="submit" value="Add">
+        <a href="loginKupac.html" class="loginlink">Login page</a>
+    </form>
+</div>
+
+<footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+    <p class="text-center text-muted">© 2022 LANCH, Inc</p>
+</footer>
+
+
 
 </body>
 </html>
