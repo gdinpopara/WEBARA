@@ -49,7 +49,6 @@ $(document).on("submit","#loginKupac",function (event){
     var korisnickoIme = $("#korisnickoIme").val();
     var lozinka = $("#lozinka").val();
 
-
     var noviKorisnik = formToJson2(korisnickoIme,lozinka);
 
     $.ajax(

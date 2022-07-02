@@ -12,6 +12,7 @@ import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,12 @@ public class AdminRestController
 
     @Autowired
     MenadzerRepository menadzerRepository;
-    @PostMapping("/api/admin/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
+
+    @PostMapping(value = "/api/admin/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<LoginDto> login(@RequestBody LoginDto loginDto, HttpSession session)
     {
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getPassword().isEmpty())
         {
@@ -51,12 +56,14 @@ public class AdminRestController
 
         if(logovaniAdmin==null)
         {
-            return new ResponseEntity("Admin sa ovim podacima ne postoji!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Admin sa ovim podacima ne postoji!",HttpStatus.BAD_REQUEST);
         }
 
         session.setAttribute("admin",logovaniAdmin);
-        return ResponseEntity.ok("Uspesno logovanje admine!");
+        return new ResponseEntity<>(loginDto,HttpStatus.OK);
     }
+
+
 
     @PostMapping("/api/admin/dodaj-menadzer")
     public ResponseEntity dodajM(@RequestBody Menadzer menadzer, HttpSession session)
