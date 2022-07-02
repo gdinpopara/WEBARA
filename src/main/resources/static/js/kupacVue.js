@@ -20,6 +20,7 @@ $(document).on("submit","#register",function (event){
             success:function()
             {
                 alert(korisnickoIme + " se uspesno registrovao/la!");
+                window.location.href="loginKupac.html";
             },
             error:function (data)
             {
@@ -61,6 +62,7 @@ $(document).on("submit","#loginKupac",function (event){
             success:function()
             {
                 alert(korisnickoIme + " se uspesno ulogovao/la!");
+                window.location.href="homePage.html";
             },
             error:function (data)
             {

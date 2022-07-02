@@ -3,8 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin strana</title>
+    <script src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/admin.js"></script>
+    <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
+<div class="card">
+<form id="dodajM">
+    <label for="korisnickoIme">Korisnicko ime:</label>
+    <input id="korisnickoIme" type="text"/><br>
+    <label for="lozinka">Lozinka:</label>
+    <input id="lozinka" type="text"/><br>
+    <label for="ime">Ime:</label>
+    <input id="ime" type="text"/><br>
+    <label for="prezime">Prezime:</label>
+    <input id="prezime" type="text"/><br>
+    <label for="pol">Pol:</label>
+    <input id="pol" type="text"/><br>
+    <label for="datumRodjenja">Datum rodjenja:</label>
+    <input id="datumRodjenja" type="date"/><br>
+    <input type="submit" value="Add">
+</form>
+</div>
+<br><br><br><br><br><br><br><br><br>
+
+
+<form id="dodajD">
+    <label for="korisnickoIme1">Korisnicko ime:</label>
+    <input id="korisnickoIme1" type="text"/><br>
+    <label for="lozinka1">Lozinka:</label>
+    <input id="lozinka1" type="text"/><br>
+    <label for="ime1">Ime:</label>
+    <input id="ime1" type="text"/><br>
+    <label for="prezime1">Prezime:</label>
+    <input id="prezime1" type="text"/><br>
+    <label for="pol1">Pol:</label>
+    <input id="pol1" type="text"/><br>
+    <label for="datumRodjenja1">Datum rodjenja:</label>
+    <input id="datumRodjenja1" type="date"/><br>
+    <input type="submit" value="Add">
+</form>
+
+
+
+<br><br><br><br><br><br><br><br><br>
+<form id="dodajR">
+    <label for="nazivR">Naziv restorana:</label>
+    <input id="nazivR" type="text"/><br>
+    <label for="tipR">Tip restorana:</label>
+    <input id="tipR" type="text"/><br>
+    <input type="submit" value="Add">
+</form>
+<br><br><br><br><br><br><br><br><br>
+
+<table>
+    <thead>
+        <th>Korisnicko ime</th>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Pol</th>
+        <th>Datum rodjenja</th>
+        <th>Uloga</th>
+    </thead>
+    <tbody id="sviKorisnici">
+
+    </tbody>
+</table>
+<button type="button" id="prikaz">Prikazi!</button>
+<br><br><br><br><br><br><br><br><br>
+
+
+<table>
+    <thead>
+
+    <th>Naziv</th>
+    <th>Tip</th>
+    <th>Lokacija</th>
+    </thead>
+    <tbody id="sviRestorani">
+
+    </tbody>
+</table>
+
+<button type="button" id="prikazR">Prikazi!</button>
+<br><br><br><br><br><br><br><br><br>
+
+
+<button type="button" id="logout">logout!</button>
 
 </body>
 </html>

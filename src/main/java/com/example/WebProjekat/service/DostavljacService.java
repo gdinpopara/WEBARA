@@ -28,6 +28,12 @@ public class DostavljacService
         return "Uspesno dodat dostavljac!";
     }
 
+//    public String dodajMenadzera(Menadzer menadzer) {
+//        menadzer.setUloga(Uloga.MENADZER);
+//        menadzerRepository.save(menadzer);
+//        return "Uspesno dodat menadzer!";
+//    }
+
     public Dostavljac login(String username, String sifra)
     {
         Dostavljac dostavljac = dostavljacRepository.getById(username);

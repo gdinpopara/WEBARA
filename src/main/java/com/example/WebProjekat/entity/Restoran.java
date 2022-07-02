@@ -58,6 +58,13 @@ public class Restoran
         this.radi=true;
     }
 
+    public Restoran(String naziv,String tip)
+    {
+        this.naziv = naziv;
+        this.tip = tip;
+        this.radi = true;
+    }
+
     public Restoran(Menadzer menadzer, Porudzbina porudzbina, Set<Komentar> komentari, String naziv, String tip, Set<Artikal> artikli, Lokacija lokacija) {
         this.menadzer = menadzer;
         this.porudzbina = porudzbina;
