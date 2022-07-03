@@ -12,6 +12,7 @@ import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,12 @@ public class AdminRestController
 
     @Autowired
     MenadzerRepository menadzerRepository;
-    @PostMapping("/api/admin/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
+
+    @PostMapping(value = "/api/admin/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE, // URADJENO
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<LoginDto> login(@RequestBody LoginDto loginDto, HttpSession session)
     {
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getPassword().isEmpty())
         {
@@ -51,27 +56,53 @@ public class AdminRestController
 
         if(logovaniAdmin==null)
         {
-            return new ResponseEntity("Admin sa ovim podacima ne postoji!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Admin sa ovim podacima ne postoji!",HttpStatus.BAD_REQUEST);
         }
 
         session.setAttribute("admin",logovaniAdmin);
-        return ResponseEntity.ok("Uspesno logovanje admine!");
+        return new ResponseEntity<>(loginDto,HttpStatus.OK);
     }
 
-    @PostMapping("/api/admin/dodaj-menadzer")
-    public ResponseEntity dodajM(@RequestBody Menadzer menadzer, HttpSession session)
+
+
+    @PostMapping(value = "/api/admin/dodaj-menadzer", // URADJENO
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Menadzer> dodajM(@RequestBody Menadzer menadzer, HttpSession session)
     {
         admin logovaniAdmin = (admin) session.getAttribute("admin");
 
         if(logovaniAdmin == null) {
-            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.BAD_REQUEST);
         }
 
         menadzerService.dodajMenadzera(menadzer);
 
-        return new ResponseEntity("Menadzer dodat!",HttpStatus.OK);
+        return new ResponseEntity<>(menadzer,HttpStatus.OK);
     }
-    @GetMapping("/api/admin/dodeli-menadzera")
+
+
+    @PostMapping(value = "/api/admin/dodaj-dostavljac", // URADJENO
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Dostavljac> dodajD(@RequestBody Dostavljac dostavljac, HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.BAD_REQUEST);
+        }
+
+        dostavljacService.dodajDostavljaca(dostavljac);
+
+        return new ResponseEntity<>(dostavljac,HttpStatus.OK);
+    }
+
+
+
+
+    @GetMapping("/api/admin/dodeli-menadzera")// TREBA ISPRAVITI
     public ResponseEntity dodeliM(@RequestParam String korisnickoIme, HttpSession session)
     {
         admin logovaniAdmin = (admin) session.getAttribute("admin");
@@ -91,48 +122,43 @@ public class AdminRestController
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
     }
 
-    @PostMapping("/api/admin/dodaj-dostavljac")
-    public ResponseEntity dodajD(@RequestBody Dostavljac dostavljac, HttpSession session)
+
+
+    @PostMapping(value = "/api/admin/dodaj-restoran", // URADJENO
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Restoran> dodajR(@RequestBody Restoran restoran, HttpSession session)
     {
         admin logovaniAdmin = (admin) session.getAttribute("admin");
 
         if(logovaniAdmin == null) {
-            return new ResponseEntity("Dostavljac dodat!",HttpStatus.FORBIDDEN);
-        }
-
-        dostavljacService.dodajDostavljaca(dostavljac);
-
-        return new ResponseEntity("Dostavljac dodat!",HttpStatus.OK);
-    }
-    @PostMapping("/api/admin/dodaj-restoran")
-    public ResponseEntity dodajR(@RequestBody Restoran restoran, HttpSession session)
-    {
-        admin logovaniAdmin = (admin) session.getAttribute("admin");
-
-        if(logovaniAdmin == null) {
-            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.BAD_REQUEST);
         }
 
         restoranService.dodajRestoran(restoran);
 
-        return new ResponseEntity("Uspesno dodavanje!",HttpStatus.OK);
+        return new ResponseEntity<>(restoran,HttpStatus.OK);
     }
 
-    @PostMapping("/api/admin/logout")
+
+
+    @PostMapping(value = "/api/admin/logout")// URADJENO
     public ResponseEntity logout(HttpSession session)
     {
         admin logovaniAdmin = (admin) session.getAttribute("admin");
 
         if(logovaniAdmin == null)
         {
-            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.BAD_REQUEST);
         }
 
         session.invalidate();
-        return new ResponseEntity("Admin odjavljen!",HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/api/admin/pregled-korisnika")
+
+
+    @GetMapping(value = "/api/admin/pregled-korisnika", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Korisnik>> sviKorisnici(HttpSession session)
     {
         admin logovaniAdmin = (admin) session.getAttribute("admin");
@@ -141,10 +167,13 @@ public class AdminRestController
         {
             return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
         }
-
         return ResponseEntity.ok(adminService.dobaviKorisnike());
     }
-    @GetMapping("/api/admin/restorani")
+
+
+
+
+    @GetMapping(value = "/api/admin/restorani", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
     {
         admin logovaniAdmin = (admin) session.getAttribute("admin");
@@ -156,6 +185,10 @@ public class AdminRestController
 
         return ResponseEntity.ok(restorani);
     }
+
+
+
+
     @GetMapping("/api/admin/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv ,HttpSession session)
     {
@@ -168,6 +201,10 @@ public class AdminRestController
 
         return ResponseEntity.ok(restorani);
     }
+
+
+
+
     @GetMapping("/api/admin/pretragarpt")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoTipu(@RequestParam String tip ,HttpSession session)
     {
@@ -180,6 +217,9 @@ public class AdminRestController
 
         return ResponseEntity.ok(restorani);
     }
+
+
+
     @GetMapping("/api/admin/pretragarpl")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoLokaciji(@RequestBody Lokacija lokacija , HttpSession session)
     {

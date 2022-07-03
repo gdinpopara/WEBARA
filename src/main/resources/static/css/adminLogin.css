@@ -1,0 +1,49 @@
+.card{
+    border: 2px solid black;
+    height: 30em;
+    width: 30em;
+}
+.size{
+  width:160px;
+  height:100px;
+}
+.text-center {
+    text-align: center!important;
+}
+.py-5 {
+    padding-top: 5rem!important;
+    padding-bottom: 5rem!important;
+}
+.px-4 {
+    padding-right: 1.5rem!important;
+    padding-left: 1.5rem!important;
+}
+.my-5 {
+    margin-top: 10rem ;
+    margin-bottom: 14rem ;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+user agent stylesheet
+div {
+    display: block;
+}
+div.form
+{
+    display: block;
+    text-align: center;
+}
+form
+{
+    display: inline-block;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: left;
+}
+dugme{
+    margin-left:10%;
+}
+.loginlink{
+    text-align:center;
+}

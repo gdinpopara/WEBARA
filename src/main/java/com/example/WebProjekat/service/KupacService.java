@@ -6,6 +6,7 @@ import com.example.WebProjekat.repository.KupacRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,5 +68,19 @@ public class KupacService
 
         return kupac;
 
+    }
+
+    public Kupac pronadjiKupca(Kupac kupac)
+    {
+        Set<Kupac> kupacs = new HashSet<>(kupacRepository.findAll());
+        for (Kupac k:kupacs)
+        {
+            if(k.getKorisnickoIme().equals(kupac.getKorisnickoIme()))
+            {
+                return null;
+            }
+        }
+
+        return kupac;
     }
 }
