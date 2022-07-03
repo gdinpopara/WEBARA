@@ -9,6 +9,7 @@ $(document).on("submit","#register",function (event){
     var datumRodjenja = $("#datumRodjenja").val();
 
     var noviKorisnik = formToJson1(korisnickoIme,lozinka,ime,prezime,pol,datumRodjenja);
+    console.log(noviKorisnik);
 
     $.ajax(
         {
@@ -145,9 +146,7 @@ $(document).ready(function (){
                     "    <h5 class=\"card-title\">" + data[i].naziv + "</h5>\n" +
                     "    <h6 class=\"card-subtitle mb-2 text-muted\">" + data[i].tip + "</h6>\n" +
                     "    <p class=\"card-text\">" + data[i].lokacija + "</p>\n" +
-                    "    <a href=\"#\" class=\"card-link\">Card link</a>\n" +
-                    "    <a href=\"#\" class=\"card-link\">Another link</a>\n" +
-                    "  </div>\n" +
+                    "<button id=\""+data[i].naziv+"\" type=\"button\" class=\"btn\">Proizvodi</button>\n" +
                     "</div>";
                 $('#restorani').append(row);
             }
@@ -223,5 +222,258 @@ function formToJson4(ki,loz,p,dr)
 }
 
 
+$(document).on("click",".btn",function (){
+    var Table = document.getElementById("sviArtikli");
+    Table.innerHTML = "";
+    var k = this.id;
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/kupac/" + this.id + "/artikli",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + k + "</td>"
+                row+="<td>" + data[i]['naziv'] + "</td>";
+                row+="<td>" + data[i]['cena'] + "</td>";
+                row+="<td>" + data[i]['tip'] + "</td>";
+                row+="<td>" + data[i]['kolicina'] + "</td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+                row+="<td>" + "<input type=\"text\">" + "</td>";
+                row+="<td>" + "<button class=\"btnSelect\">Dodaj u korpu</button>" + "</td>";
+
+                $('#sviArtikli').append(row);
+            }
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+///api/kupac/{id}/dodaj-u-korpu
+// $(document).on("#klik",".bojler",function (event){
+//     event.preventDefault();
+//
+//     var nazivArtikla = $("#artikal").val();
+//     var restoran = $("#restoran").val();
+//     var kolicina = $("#kolicina").val();
+//
+//     var novaKorpa = formToJson1(nazivArtikla,kolicina,restoran);
+//
+//     $.ajax(
+//         {
+//             type:"POST",
+//             url:"http://localhost:8080/api/kupac/" + restoran + "/dodaj-u-korpu",
+//             dataType:"json",
+//             contentType:"application/json",
+//             data:novaKorpa,
+//             success:function()
+//             {
+//                 alert(nazivArtikla + " je uspesno dodato u korpu!");
+//             },
+//             error:function (data)
+//             {
+//                 alert("Greska prilikom dodavanja u korpu!");
+//             }
+//         }
+//     );
+// });
 
 
+
+$(document).ready(function () {
+        $("#tabela").on("click", ".btnSelect", function (){
+            var currentRow = $(this).closest("tr");
+
+            var IDartikal = currentRow.find("td:eq(1)").text();
+            var kolicina = currentRow.find("td:eq(6) input[type='text']").val();
+            var nazivRestorana = currentRow.find("td:eq(0)").text();
+
+            var novaKorpa = formToJson10(IDartikal, kolicina, nazivRestorana);
+
+            console.log(novaKorpa);
+            $.ajax(
+                {
+                    type:"POST",
+                    url:"http://localhost:8080/api/kupac/dodaj-u-korpu",
+                    dataType:"json",
+                    contentType:"application/json",
+                    data:novaKorpa,
+                    success: function () {
+                        alert("Uspesno dodato u korpu!");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("Greska prilikom dodavanja u korpu!" + data);
+                        console.log(data);
+                    }
+                }
+            );
+
+        });
+    }
+);
+
+function formToJson10(art,kol,naz) {
+    return JSON.stringify({
+        "idartikal":art,
+        "kolicina":kol,
+        "nazivRestorana":naz
+    });
+}
+
+$(document).ready(function (){
+    var Table = document.getElementById("korpaArtikli");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/kupac/pregled-korpe/artikli",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['naziv'] + "</td>";
+                row+="<td>" + data[i]['cena'] + "</td>";
+                row+="<td>" + data[i]['tip'] + "</td>";
+                row+="<td><button type='button' id='smanji'>-</button></td>";
+                row+="<td>" + data[i]['kolicina'] + "</td>";
+                row+="<td><button type='button' id='povecaj'>+</button></td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+                row+="<td><button type='button' class='nesto' id='"+data[i]['naziv']+"'>x</button></td>";
+
+
+                if(i==data.length-1)
+                {
+                    row+="<td><button type='button' class='nesto1' id='"+data[i]['nazivRestorana']+"'>Poruci</button></td>";
+                }
+
+                $('#korpaArtikli').append(row);
+            }
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).ready(function () {
+        $("#korpaArtikli").on("click", "#smanji", function (){
+            var currentRow = $(this).closest("tr");
+
+            var IDartikal = currentRow.find("td:eq(0)").text();
+            var novaKorpa = formToJson15(IDartikal,1);
+
+            console.log(novaKorpa);
+            $.ajax(
+                {
+                    type:"POST",
+                    url:"http://localhost:8080/api/kupac/pregled-korpe/smanji-kolicinu",
+                    dataType:"json",
+                    contentType:"application/json",
+                    data:novaKorpa,
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("Greska prilikom smanjivanja!");
+                        console.log(data);
+                    }
+                }
+            );
+
+        });
+    }
+);
+
+function formToJson15(art,kol) {
+    return JSON.stringify({
+        "nazivArtikla":art,
+        "kolicina":kol
+    });
+}
+
+$(document).ready(function () {
+        $("#korpaArtikli").on("click", "#povecaj", function (){
+            var currentRow = $(this).closest("tr");
+
+            var IDartikal = currentRow.find("td:eq(0)").text();
+            var novaKorpa = formToJson15(IDartikal,1);
+
+            console.log(novaKorpa);
+            $.ajax(
+                {
+                    type:"POST",
+                    url:"http://localhost:8080/api/kupac/pregled-korpe/povecaj-kolicinu",
+                    dataType:"json",
+                    contentType:"application/json",
+                    data:novaKorpa,
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("Greska prilikom povecavanja!");
+                        console.log(data);
+                    }
+                }
+            );
+
+        });
+    }
+);
+
+$(document).ready(function () {
+        $("#korpaArtikli").on("click", ".nesto", function (){
+            //var currentRow = $(this).closest("tr");
+
+            //var IDartikal = currentRow.find("td:eq(0)").text();
+
+            $.ajax(
+                {
+                    type:"POST",
+                    url:"http://localhost:8080/api/kupac/restoran/izbaci-iz-korpe/" + this.id,
+                    dataType:"json",
+                    contentType:"application/json",
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Greska prilikom izbacivanja!");
+                    }
+                }
+            );
+
+        });
+    }
+);
+
+$(document).ready(function () {
+        $("#korpaArtikli").on("click", ".nesto", function (){
+            //var currentRow = $(this).closest("tr");
+
+            //var IDartikal = currentRow.find("td:eq(0)").text();
+
+            $.ajax(
+                {
+                    type:"POST",
+                    url:"http://localhost:8080/api/kupac/restoran/izbaci-iz-korpe/" + this.id,
+                    dataType:"json",
+                    contentType:"application/json",
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Greska prilikom izbacivanja!");
+                    }
+                }
+            );
+
+        });
+    }
+);

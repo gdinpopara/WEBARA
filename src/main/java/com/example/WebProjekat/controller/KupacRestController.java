@@ -87,6 +87,21 @@ public class KupacRestController
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @GetMapping(value = "/api/kupac/{id}/artikli", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<Artikal>> pregledArtikala(@PathVariable String id, HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac == null)
+        {
+            return new ResponseEntity("Kupac nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        Set<Artikal> artikals = restoranService.vratiArtikle(id);
+
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/api/kupac/pregled-porudzbina", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session)
@@ -105,7 +120,9 @@ public class KupacRestController
         return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/restoran/dodaj-u-korpu")
+    @PostMapping(value = "/api/kupac/dodaj-u-korpu", // URADJENO
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<KorpaDto> dodajUKorpu(@RequestBody KorpaDto korpaDto, HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -120,17 +137,13 @@ public class KupacRestController
             return new ResponseEntity("Morate uneti jedan ili vise artikala!",HttpStatus.BAD_REQUEST);
         }
 
-        if( korpaDto.getIDartikal()==null || korpaDto.getNazivRestorana()==null)
-        {
-            return new ResponseEntity("Morate uneti podatke!",HttpStatus.BAD_REQUEST);
-        }
-
         korpaService.dodajUKorpu(logovaniKupac,korpaDto);
-        return ResponseEntity.ok(korpaDto);
+        return new ResponseEntity<>(korpaDto,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/restoran/izbaci-iz-korpe")
-    public ResponseEntity<Korpa> izbaciIzKorpe(@RequestParam String nazivArtikla, HttpSession session)
+
+    @PostMapping(value = "/api/kupac/restoran/izbaci-iz-korpe/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO (ne radi)
+    public ResponseEntity<String> izbaciIzKorpe(@PathVariable String id, HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
 
@@ -139,12 +152,12 @@ public class KupacRestController
             return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
         }
 
-        korpaService.izbaciIzKorpe(logovaniKupac,nazivArtikla);
-        return ResponseEntity.ok(logovaniKupac.getKorpa());
+        korpaService.izbaciIzKorpe(logovaniKupac,id);
+        return new ResponseEntity<>(id,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/pregled-korpe/povecaj-kolicinu")
-    public ResponseEntity<Korpa> povecajKolicinu(@RequestBody PovecajSmanjiDTO povecajSmanjiDTO, HttpSession session)
+    @PostMapping(value = "/api/kupac/pregled-korpe/povecaj-kolicinu", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
+    public ResponseEntity<PovecajSmanjiDTO> povecajKolicinu(@RequestBody PovecajSmanjiDTO povecajSmanjiDTO, HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
 
@@ -154,11 +167,11 @@ public class KupacRestController
         }
 
         korpaService.povecaj(logovaniKupac,povecajSmanjiDTO);
-        return ResponseEntity.ok(logovaniKupac.getKorpa());
+        return new ResponseEntity<>(povecajSmanjiDTO,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/pregled-korpe/smanji-kolicinu")
-    public ResponseEntity<Korpa> smanjiKolicinu(@RequestBody PovecajSmanjiDTO povecajSmanjiDTO, HttpSession session)
+    @PostMapping(value = "/api/kupac/pregled-korpe/smanji-kolicinu", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
+    public ResponseEntity<PovecajSmanjiDTO> smanjiKolicinu(@RequestBody PovecajSmanjiDTO povecajSmanjiDTO, HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
 
@@ -168,10 +181,10 @@ public class KupacRestController
         }
 
         korpaService.smanji(logovaniKupac,povecajSmanjiDTO);
-        return ResponseEntity.ok(logovaniKupac.getKorpa());
+        return new ResponseEntity<>(povecajSmanjiDTO,HttpStatus.OK);
     }
 
-    @GetMapping("/api/kupac/pregled-korpe")
+    @GetMapping(value = "/api/kupac/pregled-korpe", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Korpa> pregledKorpe(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -182,12 +195,11 @@ public class KupacRestController
         }
 
         Korpa korpa = korpaService.pregledajKorpu(logovaniKupac);
-        return ResponseEntity.ok(korpa);
-
+        return new ResponseEntity<>(korpa,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/poruci")
-    public ResponseEntity<Porudzbina> poruciIzRestorana(@RequestParam String restoranNaziv, HttpSession session)
+    @GetMapping(value = "/api/kupac/pregled-korpe/artikli", produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
+    public ResponseEntity<Set<Artikal>> pregledajKorpu(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
 
@@ -196,11 +208,26 @@ public class KupacRestController
             return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
         }
 
-        Restoran restoran = restoranService.nadjiPoImenu(restoranNaziv);
+        return new ResponseEntity<>(korpaService.vratiArtikle(logovaniKupac),HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/api/kupac/poruci/{id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> poruciIzRestorana(@PathVariable String id, HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac==null)
+        {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+
+        Restoran restoran = restoranService.nadjiPoImenu(id);
         Porudzbina porudzbina = porudzbinaService.poruci(logovaniKupac,restoran);
 
-        return ResponseEntity.ok(porudzbina);
+        return new ResponseEntity<>(id,HttpStatus.OK);
     }
+
     @GetMapping(value = "/api/kupac/restorani", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
     {
@@ -213,6 +240,7 @@ public class KupacRestController
 
         return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
+
     @GetMapping("/api/kupac/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
     {
@@ -225,6 +253,7 @@ public class KupacRestController
 
         return ResponseEntity.ok(restorani);
     }
+
     @GetMapping("/api/kupac/pretragarpt")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoTipu(@RequestParam String tip ,HttpSession session)
     {
@@ -237,6 +266,7 @@ public class KupacRestController
 
         return ResponseEntity.ok(restorani);
     }
+
     @GetMapping("/api/kupac/pretragarpl")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoLokaciji(@RequestBody Lokacija lokacija , HttpSession session)
     {

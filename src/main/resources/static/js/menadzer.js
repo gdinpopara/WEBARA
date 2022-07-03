@@ -1,4 +1,4 @@
-$(document).on("submit","#loginDostavljac",function (event){
+$(document).on("submit","#loginMenadzer",function (event){
     event.preventDefault();
 
     var korisnickoIme = $("#korisnickoIme").val();
@@ -9,14 +9,14 @@ $(document).on("submit","#loginDostavljac",function (event){
     $.ajax(
         {
             type:"POST",
-            url:"http://localhost:8080/api/dostavljac/login",
+            url:"http://localhost:8080/api/menadzer/login",
             dataType:"json",
             contentType:"application/json",
             data:noviKorisnik,
             success:function()
             {
                 alert(korisnickoIme + " se uspesno ulogovao/la!");
-                window.location.href = "dostavljacStrana.html";
+                window.location.href = "menadzerStrana.html";
             },
             error:function (data)
             {
@@ -36,33 +36,6 @@ function formToJson2(ki,loz)
     );
 }
 
-$(document).on("click","#prikazR",function (){
-    var Table = document.getElementById("sviRestorani");
-    Table.innerHTML = "";
-    $.ajax({
-        type:"GET",
-        url:"http://localhost:8080/api/admin/restorani",
-        dataType:"json",
-        success:function (data){
-            for(i=0;i<data.length;i++)
-            {
-                var row = "<tr>";
-                row+="<td>" + data[i]['id'] + "</td>";
-                row+="<td>" + data[i]['kupac'] + "</td>";
-                row+="<td>" + data[i]['poruceniArtikli'] + "</td>";
-                row+="<td>" + data[i]['restoranPoruceno'] + "</td>";
-                row+="<td>" + data[i]['datumIVremePorudzbine'] + "</td>";
-                row+="<td>" + data[i]['status'] + "</td>";
-                row+="<td>" + data[i]['ukupnaCena'] + "</td>";
-
-                $('#sviRestorani').append(row);
-            }
-        },
-        error:function (data){
-            console.log("GRESKA:",data)
-        }
-    });
-});
 
 $(document).on("click","#logout",function (/*event*/){
     //event.preventDefault();

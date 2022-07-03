@@ -83,7 +83,7 @@ public class DostavljacRestController
         return ResponseEntity.ok(porudzbine);
     }
 
-    @PostMapping("/api/dostavljac/logout")
+    @PostMapping("/api/dostavljac/logout")// URADJENO
     public ResponseEntity logout(HttpSession session)
     {
         Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");

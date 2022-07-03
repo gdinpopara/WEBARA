@@ -5,11 +5,11 @@ import java.util.UUID;
 public class KorpaDto
 {
     private String IDartikal;
-    private int kolicina;
+    private String kolicina;
     private String nazivRestorana;
 
 
-    public KorpaDto(String IDartikal, int kolicina, String nazivRestorana)
+    public KorpaDto(String IDartikal, String kolicina, String nazivRestorana)
     {
         this.IDartikal = IDartikal;
         this.kolicina = kolicina;
@@ -36,10 +36,10 @@ public class KorpaDto
     }
 
     public int getKolicina() {
-        return kolicina;
+        return Integer.parseInt(kolicina);
     }
 
     public void setKolicina(int kolicina) {
-        this.kolicina = kolicina;
+        this.kolicina = Integer.toString(kolicina);
     }
 }

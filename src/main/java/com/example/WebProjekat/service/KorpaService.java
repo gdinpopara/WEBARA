@@ -99,6 +99,11 @@ public class KorpaService {
         return kupac.getKorpa();
     }
 
+    public Set<Artikal> vratiArtikle(Kupac kupac)
+    {
+        return kupac.getKorpa().getArtikli();
+    }
+
     public Korpa izbaciIzKorpe(Kupac kupac, String nazivArtikla)
     {
         if (kupac.getKorpa()==null)

@@ -9,6 +9,7 @@ import com.example.WebProjekat.service.PorudzbinaService;
 import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,8 @@ public class MenadzerRestController
     @Autowired
     private RestoranService restoranService;
 
-    @PostMapping("/api/menadzer/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
+    @PostMapping(value = "/api/menadzer/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
+    public ResponseEntity<LoginDto> login(@RequestBody LoginDto loginDto, HttpSession session)
     {
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getPassword().isEmpty())
         {
@@ -43,13 +44,13 @@ public class MenadzerRestController
         }
 
         session.setAttribute("menadzer",logovaniMenadzer);
-        return ResponseEntity.ok("Uspesno logovanje!");
+        return new ResponseEntity<>(loginDto,HttpStatus.OK);
     }
 
-    @PostMapping("/api/menadzer/logout")
+    @PostMapping(value = "/api/menadzer/logout") // uradjeno
     public ResponseEntity logout(HttpSession session)
     {
-        Kupac logovaniKupac = (Kupac) session.getAttribute("menadzer");
+        Menadzer logovaniKupac = (Menadzer) session.getAttribute("menadzer");
 
         if(logovaniKupac == null)
         {
@@ -57,7 +58,7 @@ public class MenadzerRestController
         }
 
         session.invalidate();
-        return new ResponseEntity("Menadzer odjavljen!",HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/api/menadzer/porudzbine")

@@ -70,7 +70,7 @@ public class KorisnikRestController
         return ResponseEntity.ok(logovaniDostavljac);
     }
 
-    @PostMapping (value = "/api/kupac-izmeni",
+    @PostMapping (value = "/api/kupac-izmeni",     // uradjeno
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
