@@ -10,6 +10,7 @@ import com.example.WebProjekat.service.KupacService;
 import com.example.WebProjekat.service.MenadzerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ public class KorisnikRestController
     @Autowired
     private DostavljacService dostavljacService;
 
-    @GetMapping("/api/kupac-pregled")
+    @GetMapping(value = "/api/kupac-pregled", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Kupac> pregledK(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -40,7 +41,7 @@ public class KorisnikRestController
             return new ResponseEntity("Niste ulogovani!", HttpStatus.FORBIDDEN);
         }
 
-        return ResponseEntity.ok(logovaniKupac);
+        return new ResponseEntity<>(logovaniKupac,HttpStatus.OK);
     }
 
     @GetMapping("/api/menadzer-pregled")
@@ -69,8 +70,11 @@ public class KorisnikRestController
         return ResponseEntity.ok(logovaniDostavljac);
     }
 
-    @PostMapping ("/api/kupac-izmeni")
-    public ResponseEntity<Kupac> izmeniK(@RequestBody izmenaDto izmenadto, HttpSession session)
+    @PostMapping (value = "/api/kupac-izmeni",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Kupac> izmeniK(@RequestBody izmenaDto izmenadto, HttpSession session) // URADJENO
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
 
@@ -80,7 +84,7 @@ public class KorisnikRestController
         }
 
         Kupac kupac = kupacService.izmena(izmenadto,logovaniKupac);
-        return ResponseEntity.ok(kupac);
+        return new ResponseEntity<>(kupac,HttpStatus.OK);
     }
 
     @PostMapping("/api/menadzer-izmeni")

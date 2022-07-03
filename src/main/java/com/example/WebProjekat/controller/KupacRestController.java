@@ -8,6 +8,7 @@ import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,15 +37,25 @@ public class KupacRestController
     @Autowired
     private KorisnikService korisnikService;
 
-    @PostMapping("/api/kupac/registracija")
-    public String saveKupac(@RequestBody Kupac kupac)
+    @PostMapping(value = "/api/kupac/registracija", // URADJENO
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Kupac> saveKupac(@RequestBody Kupac kupac)
     {
+        if(kupacService.pronadjiKupca(kupac)==null)
+        {
+            return new ResponseEntity<>(kupac,HttpStatus.BAD_REQUEST);
+        }
         this.kupacService.save(kupac);
-        return "Uspesna registracija!";
+        return new ResponseEntity<>(kupac,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
+    @PostMapping(value = "/api/kupac/login",   // URADJENO
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<LoginDto> login(@RequestBody LoginDto loginDto, HttpSession session)
     {
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getPassword().isEmpty())
         {
@@ -55,14 +66,14 @@ public class KupacRestController
 
         if(logovaniKupac==null)
         {
-            return new ResponseEntity("Korisnik sa ovim podacima ne postoji!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Korisnik sa ovim podacima ne postoji!",HttpStatus.BAD_REQUEST);
         }
 
         session.setAttribute("kupac",logovaniKupac);
-        return ResponseEntity.ok("Uspesno logovanje!");
+        return new ResponseEntity<>(loginDto,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/logout")
+    @PostMapping("/api/kupac/logout") // URADJENO
     public ResponseEntity logout(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -73,11 +84,11 @@ public class KupacRestController
         }
 
         session.invalidate();
-        return new ResponseEntity("Kupac odjavljen!",HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
-    @GetMapping("/api/kupac/pregled-porudzbina")
+    @GetMapping(value = "/api/kupac/pregled-porudzbina", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -91,7 +102,7 @@ public class KupacRestController
 
         Set<Porudzbina> porudzbine = kupacService.pregledajPorudzbine(username);
 
-        return ResponseEntity.ok(porudzbine);
+        return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
 
     @PostMapping("/api/kupac/restoran/dodaj-u-korpu")
@@ -190,7 +201,7 @@ public class KupacRestController
 
         return ResponseEntity.ok(porudzbina);
     }
-    @GetMapping("/api/kupac/restorani")
+    @GetMapping(value = "/api/kupac/restorani", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -200,7 +211,7 @@ public class KupacRestController
         }
         Set<Restoran> restorani = restoranService.spisakRestorana();
 
-        return ResponseEntity.ok(restorani);
+        return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
     @GetMapping("/api/kupac/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
