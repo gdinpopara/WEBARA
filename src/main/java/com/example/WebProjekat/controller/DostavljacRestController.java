@@ -7,6 +7,7 @@ import com.example.WebProjekat.service.PorudzbinaService;
 import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,10 @@ public class DostavljacRestController
     @Autowired
     private RestoranService restoranService;
 
-    @PostMapping("/api/dostavljac/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session)
+    @PostMapping(value = "/api/dostavljac/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE, // URADJENO
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LoginDto> login(@RequestBody LoginDto loginDto, HttpSession session)
     {
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getPassword().isEmpty())
         {
@@ -37,14 +40,16 @@ public class DostavljacRestController
 
         if(logovanidostavljac==null)
         {
-            return new ResponseEntity("Admin sa ovim podacima ne postoji!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Dostavljac sa ovim podacima ne postoji!",HttpStatus.NOT_FOUND);
         }
 
         session.setAttribute("dostavljac",logovanidostavljac);
-        return ResponseEntity.ok("Uspesno logovanje dostavljacu!");
+        return new ResponseEntity<>(loginDto,HttpStatus.OK);
     }
 
-    @GetMapping("/api/dostavljac/pregled-porudzbina-zaduzen")
+
+
+    @GetMapping(value = "/api/dostavljac/pregled-porudzbina-zaduzen", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session)
     {
         Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
@@ -58,7 +63,7 @@ public class DostavljacRestController
 
         Set<Porudzbina> porudzbine = dostavljacService.pregledajPorudzbineZaduzen(username);
 
-        return ResponseEntity.ok(porudzbine);
+        return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
 
     @GetMapping("/api/dostavljac/pregled-porudzbina-slobodne")
