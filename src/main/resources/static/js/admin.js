@@ -180,30 +180,30 @@ $(document).on("click","#logout",function (/*event*/){
 
 $(document).on("click","#prikaz",function (){
 
-        var Table = document.getElementById("sviKorisnici");
-        Table.innerHTML = "";
-        $.ajax({
-            type:"GET",
-            url:"http://localhost:8080/api/admin/pregled-korisnika",
-            dataType:"json",
-            success:function (data){
-                for(i=0;i<data.length;i++)
-                {
-                    var row = "<tr>";
-                    row+="<td>" + data[i]['korisnickoIme'] + "</td>";
-                    row+="<td>" + data[i]['ime'] + "</td>";
-                    row+="<td>" + data[i]['prezime'] + "</td>";
-                    row+="<td>" + data[i]['pol'] + "</td>";
-                    row+="<td>" + data[i]['datumRodjenja'] + "</td>";
-                    row+="<td>" + data[i]['uloga'] + "</td>";
+    var Table = document.getElementById("sviKorisnici");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/admin/pregled-korisnika",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['korisnickoIme'] + "</td>";
+                row+="<td>" + data[i]['ime'] + "</td>";
+                row+="<td>" + data[i]['prezime'] + "</td>";
+                row+="<td>" + data[i]['pol'] + "</td>";
+                row+="<td>" + data[i]['datumRodjenja'] + "</td>";
+                row+="<td>" + data[i]['uloga'] + "</td>";
 
-                    $('#sviKorisnici').append(row);
-                }
-            },
-            error:function (data){
-                console.log("GRESKA:",data)
+                $('#sviKorisnici').append(row);
             }
-        });
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
 });
 
 

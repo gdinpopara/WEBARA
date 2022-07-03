@@ -37,7 +37,7 @@ public class KupacRestController
     @Autowired
     private KorisnikService korisnikService;
 
-    @PostMapping(value = "/api/kupac/registracija",
+    @PostMapping(value = "/api/kupac/registracija", // URADJENO
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -51,7 +51,7 @@ public class KupacRestController
         return new ResponseEntity<>(kupac,HttpStatus.OK);
     }
 
-    @PostMapping(value = "/api/kupac/login",
+    @PostMapping(value = "/api/kupac/login",   // URADJENO
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -73,7 +73,7 @@ public class KupacRestController
         return new ResponseEntity<>(loginDto,HttpStatus.OK);
     }
 
-    @PostMapping("/api/kupac/logout")
+    @PostMapping("/api/kupac/logout") // URADJENO
     public ResponseEntity logout(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -84,11 +84,11 @@ public class KupacRestController
         }
 
         session.invalidate();
-        return new ResponseEntity("Kupac odjavljen!",HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
-    @GetMapping("/api/kupac/pregled-porudzbina")
+    @GetMapping(value = "/api/kupac/pregled-porudzbina", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -102,7 +102,7 @@ public class KupacRestController
 
         Set<Porudzbina> porudzbine = kupacService.pregledajPorudzbine(username);
 
-        return ResponseEntity.ok(porudzbine);
+        return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
 
     @PostMapping("/api/kupac/restoran/dodaj-u-korpu")
@@ -201,7 +201,7 @@ public class KupacRestController
 
         return ResponseEntity.ok(porudzbina);
     }
-    @GetMapping("/api/kupac/restorani")
+    @GetMapping(value = "/api/kupac/restorani", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
@@ -211,7 +211,7 @@ public class KupacRestController
         }
         Set<Restoran> restorani = restoranService.spisakRestorana();
 
-        return ResponseEntity.ok(restorani);
+        return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
     @GetMapping("/api/kupac/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
