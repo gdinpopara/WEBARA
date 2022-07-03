@@ -1,5 +1,6 @@
 package com.example.WebProjekat.service;
 
+import com.example.WebProjekat.entity.Artikal;
 import com.example.WebProjekat.entity.Lokacija;
 import com.example.WebProjekat.entity.Restoran;
 import com.example.WebProjekat.repository.MenadzerRepository;
@@ -68,5 +69,11 @@ public class RestoranService {
             }
         }
         return vrati;
+    }
+
+    public Set<Artikal> vratiArtikle(String id)
+    {
+        Restoran restoran = (Restoran) restoranRepository.getById(id);
+        return restoran.getArtikli();
     }
 }

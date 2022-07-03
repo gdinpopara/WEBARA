@@ -201,6 +201,8 @@ public class KupacRestController
 
         return ResponseEntity.ok(porudzbina);
     }
+
+
     @GetMapping(value = "/api/kupac/restorani", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
     {
@@ -213,6 +215,22 @@ public class KupacRestController
 
         return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
+
+    @GetMapping("/api/kupac/{id}/artikli")
+    public ResponseEntity<Set<Artikal>> prikazArtikala(@PathVariable String id, HttpSession session)
+    {
+        Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");
+
+        if(logovaniKupac == null) {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+
+        Set<Artikal> artikals = restoranService.vratiArtikle(id);
+
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
+    }
+
+
     @GetMapping("/api/kupac/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
     {

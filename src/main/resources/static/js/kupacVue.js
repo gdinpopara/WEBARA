@@ -131,8 +131,6 @@ $(document).on("click","#prikaz",function (){
 
 $(document).ready(function (){
 
-    //var Table = document.getElementById("svePorudzbine");
-    //Table.innerHTML = "";
     $.ajax({
         type:"GET",
         url:"http://localhost:8080/api/kupac/restorani",
@@ -145,8 +143,7 @@ $(document).ready(function (){
                     "    <h5 class=\"card-title\">" + data[i].naziv + "</h5>\n" +
                     "    <h6 class=\"card-subtitle mb-2 text-muted\">" + data[i].tip + "</h6>\n" +
                     "    <p class=\"card-text\">" + data[i].lokacija + "</p>\n" +
-                    "    <a href=\"#\" class=\"card-link\">Card link</a>\n" +
-                    "    <a href=\"#\" class=\"card-link\">Another link</a>\n" +
+                    "    <button id=\""+data[i].naziv+"\" type=\"button\" class=\"btn btn-warning\">Proizvodi</button>\n" +
                     "  </div>\n" +
                     "</div>";
                 $('#restorani').append(row);
@@ -222,6 +219,31 @@ function formToJson4(ki,loz,p,dr)
     );
 }
 
+$(document).on("click","#prikaz",function (){
 
+    var Table = document.getElementById("svePorudzbine");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/kupac/pregled-porudzbina",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['naziv'] + "</td>";
+                row+="<td>" + data[i]['cena'] + "</td>";
+                row+="<td>" + data[i]['tip'] + "</td>";
+                row+="<td>" + data[i]['kolicina'] + "</td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+
+                $('#sviArtikli').append(row);
+            }
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});
 
 
