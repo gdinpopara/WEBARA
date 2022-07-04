@@ -34,7 +34,10 @@ div {
     border: 2px solid black;
 }
 .colorHeader{
-    background-color:#978F8D;
+    background-color:#F3F32B;
+}
+.textC{
+    text-color:#000000;
 }
 
 .nesto1{
