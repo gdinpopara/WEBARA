@@ -142,7 +142,7 @@ public class KupacRestController
     }
 
 
-    @PostMapping(value = "/api/kupac/restoran/izbaci-iz-korpe/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO (ne radi)
+    @DeleteMapping(value = "/api/kupac/restoran/izbaci-iz-korpe/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO (ne radi)
     public ResponseEntity<String> izbaciIzKorpe(@PathVariable String id, HttpSession session)
     {
         Kupac logovaniKupac = (Kupac) session.getAttribute("kupac");

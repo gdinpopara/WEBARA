@@ -1,19 +1,14 @@
 package com.example.WebProjekat.controller;
 
-import com.example.WebProjekat.entity.Dostavljac;
-import com.example.WebProjekat.entity.Menadzer;
-import com.example.WebProjekat.entity.Porudzbina;
-import com.example.WebProjekat.entity.Status;
+import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.service.MenadzerService;
 import com.example.WebProjekat.service.PorudzbinaService;
+import com.example.WebProjekat.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Set;
@@ -27,6 +22,9 @@ public class PorudzbinaRestController
 
     @Autowired
     private MenadzerService menadzerService;
+
+    @Autowired
+    private RestoranService restoranService;
 
     @PostMapping(value = "/api/porudzbine/pripremi/{id}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Porudzbina> uPripremi(@PathVariable UUID id, HttpSession session)
@@ -88,5 +86,11 @@ public class PorudzbinaRestController
         Porudzbina porudzbina = porudzbinaService.promeniStatus(id, Status.DOSTAVLJENA);
 
         return ResponseEntity.ok(porudzbina);
+    }
+
+    @GetMapping("/api/prikaz/{id}")
+    public ResponseEntity<Restoran> pregledRestorana(@PathVariable String id)
+    {
+        return ResponseEntity.ok(restoranService.nadjiPoImenu(id));
     }
 }

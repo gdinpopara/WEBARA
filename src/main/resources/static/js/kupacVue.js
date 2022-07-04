@@ -423,6 +423,31 @@ $(document).ready(function () {
     }
 );
 
+// $(document).ready(function () {
+//         $("#korpaArtikli").on("click", ".nesto", function (){
+//             //var currentRow = $(this).closest("tr");
+//
+//             //var IDartikal = currentRow.find("td:eq(0)").text();
+//
+//             $.ajax(
+//                 {
+//                     type:"POST",
+//                     url:"http://localhost:8080/api/kupac/restoran/izbaci-iz-korpe/" + this.id,
+//                     dataType:"json",
+//                     contentType:"application/json",
+//                     success: function () {
+//                         location.reload();
+//                     },
+//                     error: function () {
+//                         alert("Greska prilikom izbacivanja!");
+//                     }
+//                 }
+//             );
+//
+//         });
+//     }
+// );
+
 $(document).ready(function () {
         $("#korpaArtikli").on("click", ".nesto", function (){
             //var currentRow = $(this).closest("tr");
@@ -431,7 +456,7 @@ $(document).ready(function () {
 
             $.ajax(
                 {
-                    type:"POST",
+                    type:"DELETE",
                     url:"http://localhost:8080/api/kupac/restoran/izbaci-iz-korpe/" + this.id,
                     dataType:"json",
                     contentType:"application/json",
@@ -439,32 +464,8 @@ $(document).ready(function () {
                         location.reload();
                     },
                     error: function () {
-                        alert("Greska prilikom izbacivanja!");
-                    }
-                }
-            );
-
-        });
-    }
-);
-
-$(document).ready(function () {
-        $("#korpaArtikli").on("click", ".nesto", function (){
-            //var currentRow = $(this).closest("tr");
-
-            //var IDartikal = currentRow.find("td:eq(0)").text();
-
-            $.ajax(
-                {
-                    type:"POST",
-                    url:"http://localhost:8080/api/kupac/restoran/izbaci-iz-korpe/" + this.id,
-                    dataType:"json",
-                    contentType:"application/json",
-                    success: function () {
-                        location.reload();
-                    },
-                    error: function () {
-                        alert("Greska prilikom izbacivanja!");
+                        //alert("Greska prilikom izbacivanja!");
+                        console.log("Greska!");
                     }
                 }
             );
