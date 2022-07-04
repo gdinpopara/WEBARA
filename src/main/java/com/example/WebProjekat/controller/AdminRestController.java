@@ -1,6 +1,7 @@
 package com.example.WebProjekat.controller;
 
 import com.example.WebProjekat.dto.LoginDto;
+import com.example.WebProjekat.dto.postaviDto;
 import com.example.WebProjekat.entity.*;
 import com.example.WebProjekat.repository.AdminRepository;
 import com.example.WebProjekat.repository.MenadzerRepository;
@@ -231,6 +232,20 @@ public class AdminRestController
         Set<Restoran> restorani = restoranService.pretraziRpoLokaciji(lokacija);
 
         return ResponseEntity.ok(restorani);
+    }
+
+    @PostMapping(value = "/api/admin/postavi-menadzera", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<postaviDto> postaviMenadzera(@RequestBody postaviDto PostaviDto,HttpSession session)
+    {
+        admin logovaniAdmin = (admin) session.getAttribute("admin");
+
+        if(logovaniAdmin == null) {
+            return new ResponseEntity("Admin nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        menadzerService.postaviMenadzera(PostaviDto.getMenadzer(),PostaviDto.getRestoran());
+
+        return new ResponseEntity<>(PostaviDto,HttpStatus.OK);
     }
 
 

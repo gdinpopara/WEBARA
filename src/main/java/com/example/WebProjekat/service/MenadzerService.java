@@ -36,6 +36,18 @@ public class MenadzerService {
         return "Uspesno dodat menadzer!";
     }
 
+    public void postaviMenadzera(String menadzer, String restoran)
+    {
+        Restoran rest = (Restoran) restoranRepository.getById(restoran);
+        Menadzer men = (Menadzer) menadzerRepository.getById(menadzer);
+
+        rest.setMenadzer(men);
+        men.setZaduzenRestoran(rest);
+
+        menadzerRepository.save(men);
+        restoranRepository.save(rest);
+    }
+
     public Menadzer login(String username, String sifra) {
         Menadzer menadzer = menadzerRepository.getById(username);
         if (menadzer == null || !menadzer.getLozinka().equals(sifra)) {

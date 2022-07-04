@@ -81,11 +81,30 @@ $(document).on("click","#prikazip",function (){
                 row+="<td>" + data[i]['kupacIme'] + "</td>";
                 row+="<td>" + data[i]['status'] + "</td>";
                 row+="<td>" + data[i]['ukupnaCena'] + "</td>";
-
+                row+="<td>" + "<button id=\""+data[i]['id']+"\" type=\"button\" class=\"nesto3\">Proizvodi</button></td>\n" ;
+                row+="<td>" + "<button id=\""+data[i]['id']+"\" type=\"button\" class=\"nesto4\">Gotova</button></td>\n" ;
                 $('#svePorudzbine').append(row);
             }
         },
         error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).on("click",".nesto3",function (){
+    var k = this.id;
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/porudzbine/pripremi/"+this.id,
+        dataType:"json",
+        contentType:"application/json",
+        success:function (){
+            alert("Porudzbina je uspesno stavljen u fazu pripreme!");
+            location.reload();
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
             console.log("GRESKA:",data)
         }
     });
@@ -327,43 +346,63 @@ $(document).ready(function (){
     });
 });
 
-$(document).on("submit","#podaci",function (event){
-    event.preventDefault();
+// $(document).on("submit","#podaci",function (event){
+//     event.preventDefault();
+//
+//     var korisnickoIme = $("#ime").val();
+//     var lozinka = $("#prezime").val();
+//     var p = $("#pol").val();
+//     var datum;
+//
+//     var noviKorisnik = formToJson4(korisnickoIme,lozinka,p,datum);
+//
+//     $.ajax(
+//         {
+//             type:"POST",
+//             url:"http://localhost:8080/api/menadzer-izmeni",
+//             dataType:"json",
+//             contentType:"application/json",
+//             data:noviKorisnik,
+//             success:function()
+//             {
+//                 alert("Uspesno izmenjeni podaci");
+//             },
+//             error:function (data)
+//             {
+//                 alert("Greska prilikom promene podataka!",data);
+//             }
+//         }
+//     );
+// });
+//
+// function formToJson4(ki,loz,p,dr)
+// {
+//     return JSON.stringify(
+//         {
+//             "ime":ki,
+//             "prezime":loz,
+//             "pol":p,
+//             "datumRodjenja":dr
+//         }
+//     );
+// }
 
-    var korisnickoIme = $("#ime").val();
-    var lozinka = $("#prezime").val();
-    var p = $("#pol").val();
-    var datum;
 
-    var noviKorisnik = formToJson4(korisnickoIme,lozinka,p,datum);
 
-    $.ajax(
-        {
-            type:"POST",
-            url:"http://localhost:8080/api/menadzer-izmeni",
-            dataType:"json",
-            contentType:"application/json",
-            data:noviKorisnik,
-            success:function()
-            {
-                alert("Uspesno izmenjeni podaci");
-            },
-            error:function (data)
-            {
-                alert("Greska prilikom promene podataka!",data);
-            }
+$(document).on("click",".nesto4",function (){
+    var k = this.id;
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/porudzbine/ceka-dostavljaca/"+this.id,
+        dataType:"json",
+        contentType:"application/json",
+        success:function (){
+            alert("Porudzbina ceka dostavljaca!");
+            location.reload();
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
         }
-    );
+    });
 });
-
-function formToJson4(ki,loz,p,dr)
-{
-    return JSON.stringify(
-        {
-            "ime":ki,
-            "prezime":loz,
-            "pol":p,
-            "datumRodjenja":dr
-        }
-    );
-}

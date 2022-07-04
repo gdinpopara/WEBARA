@@ -230,3 +230,40 @@ $(document).on("click","#prikazR",function (){
         }
     });
 });
+
+$(document).on("submit","#postaviM",function (event){
+    event.preventDefault();
+
+    var naziv = $("#nazivMen").val();
+    var tip = $("#nazivRes").val();
+
+    var noviRestoran = formToJson1000(naziv,tip);
+
+    $.ajax(
+        {
+            type:"POST",
+            url:"http://localhost:8080/api/admin/postavi-menadzera",
+            dataType:"json",
+            contentType:"application/json",
+            data:noviRestoran,
+            success:function()
+            {
+                alert("Menadzer uspesno postavljen!");
+            },
+            error:function (data)
+            {
+                alert("Greska kod postavke menadzera!");
+            }
+        }
+    );
+});
+
+function formToJson1000(ki,loz)
+{
+    return JSON.stringify(
+        {
+            "menadzer":ki,
+            "restoran":loz
+        }
+    );
+}

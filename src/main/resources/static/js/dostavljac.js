@@ -146,3 +146,132 @@ $(document).ready(function (){
         }
     });
 });
+
+
+$(document).ready(function (){
+    var Table = document.getElementById("korpaArtikli");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/dostavljac/pregled-porudzbina-slobodne",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['id'] + "</td>";
+                row+="<td>" + data[i]['kupac'] + "</td>";
+                row+="<td>" + data[i]['poruceniArtikli'] + "</td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+                row+="<td>" + data[i]['restoranPoruceno'] + "</td>";
+                row+="<td>" + data[i]['datumIVremePorudzbine'] + "</td>";
+                row+="<td>" + data[i]['status'] + "</td>";
+                row+="<td>" + data[i]['ukupnaCena'] + "</td>";
+                row+="<td><button type='button' class='nesto5' id='"+data[i]['id']+"'>Preuzmi</button></td>";
+
+                $('#korpaArtikli').append(row);
+            }
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).on("click",".nesto5",function (){
+    var k = this.id;
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/porudzbine/u-transportu/"+this.id,
+        dataType:"json",
+        contentType:"application/json",
+        success:function (){
+            alert("Porudzbina preuzeta!");
+            location.reload();
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).ready(function (){
+    var Table = document.getElementById("korpaArtikli");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/dostavljac/pregled-porudzbina-slobodne",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['id'] + "</td>";
+                row+="<td>" + data[i]['kupac'] + "</td>";
+                row+="<td>" + data[i]['poruceniArtikli'] + "</td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+                row+="<td>" + data[i]['restoranPoruceno'] + "</td>";
+                row+="<td>" + data[i]['datumIVremePorudzbine'] + "</td>";
+                row+="<td>" + data[i]['status'] + "</td>";
+                row+="<td>" + data[i]['ukupnaCena'] + "</td>";
+                row+="<td><button type='button' class='nesto5' id='"+data[i]['id']+"'>Preuzmi</button></td>";
+
+                $('#korpaArtikli').append(row);
+            }
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+
+$(document).ready(function (){
+    var Table = document.getElementById("korpaArtikli");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/dostavljac/pregled-porudzbina-zaduzen",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['id'] + "</td>";
+                row+="<td>" + data[i]['kupac'] + "</td>";
+                row+="<td>" + data[i]['poruceniArtikli'] + "</td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+                row+="<td>" + data[i]['restoranPoruceno'] + "</td>";
+                row+="<td>" + data[i]['datumIVremePorudzbine'] + "</td>";
+                row+="<td>" + data[i]['status'] + "</td>";
+                row+="<td>" + data[i]['ukupnaCena'] + "</td>";
+                row+="<td><button type='button' class='nesto6' id='"+data[i]['id']+"'>Dostavi</button></td>";
+
+                $('#korpaArtikli').append(row);
+            }
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).on("click",".nesto6",function (){
+    var k = this.id;
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/porudzbine/dostavljeno/"+this.id,
+        dataType:"json",
+        contentType:"application/json",
+        success:function (){
+            alert("Porudzbina dostavljena!");
+            location.reload();
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+//row+="<td><button type='button' class='nesto6' id='"+data[i]['id']+"'>Preuzmi</button></td>";

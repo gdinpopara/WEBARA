@@ -66,7 +66,7 @@ public class DostavljacRestController
         return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
 
-    @GetMapping("/api/dostavljac/pregled-porudzbina-slobodne")
+    @GetMapping(value = "/api/dostavljac/pregled-porudzbina-slobodne", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbinaSlobodne(HttpSession session)
     {
         Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
@@ -80,7 +80,7 @@ public class DostavljacRestController
 
         Set<Porudzbina> porudzbine = porudzbinaService.pregledajPorudzbineSlobodne(Status.CEKA_DOSTAVLJACA);
 
-        return ResponseEntity.ok(porudzbine);
+        return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
 
 
