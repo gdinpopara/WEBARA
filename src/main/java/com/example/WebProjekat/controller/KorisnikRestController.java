@@ -44,7 +44,7 @@ public class KorisnikRestController
         return new ResponseEntity<>(logovaniKupac,HttpStatus.OK);
     }
 
-    @GetMapping("/api/menadzer-pregled")
+    @GetMapping(value = "/api/menadzer-pregled", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Menadzer> pregledM(HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
@@ -54,10 +54,10 @@ public class KorisnikRestController
             return new ResponseEntity("Niste ulogovani!", HttpStatus.FORBIDDEN);
         }
 
-        return ResponseEntity.ok(logovaniMenadzer);
+        return new ResponseEntity<>(logovaniMenadzer,HttpStatus.OK);
     }
 
-    @GetMapping("/api/dostavljac-pregled")
+    @GetMapping(value = "/api/dostavljac-pregled", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dostavljac> pregledD(HttpSession session)
     {
         Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
@@ -67,7 +67,7 @@ public class KorisnikRestController
             return new ResponseEntity("Niste ulogovani!", HttpStatus.FORBIDDEN);
         }
 
-        return ResponseEntity.ok(logovaniDostavljac);
+        return new ResponseEntity<>(logovaniDostavljac,HttpStatus.OK);
     }
 
     @PostMapping (value = "/api/kupac-izmeni",     // uradjeno
@@ -87,7 +87,9 @@ public class KorisnikRestController
         return new ResponseEntity<>(kupac,HttpStatus.OK);
     }
 
-    @PostMapping("/api/menadzer-izmeni")
+    @PostMapping(value = "/api/menadzer-izmeni",     // uradjeno
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menadzer> izmeniM(@RequestBody izmenaDto izmenadto, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
@@ -99,10 +101,12 @@ public class KorisnikRestController
 
         Menadzer menadzer = menadzerService.izmena(izmenadto,logovaniMenadzer);
 
-        return ResponseEntity.ok(menadzer);
+        return new ResponseEntity<>(menadzer,HttpStatus.OK);
     }
 
-    @PostMapping("/api/dostavljac-izmeni")
+    @PostMapping(value = "/api/dostavljac-izmeni",     // uradjeno
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dostavljac> izmeniD(@RequestBody izmenaDto izmenadto, HttpSession session)
     {
         Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
@@ -114,6 +118,6 @@ public class KorisnikRestController
 
         Dostavljac dostavljac = dostavljacService.izmena(izmenadto,logovaniDostavljac);
 
-        return ResponseEntity.ok(dostavljac);
+        return new ResponseEntity<>(dostavljac,HttpStatus.OK);
     }
 }
