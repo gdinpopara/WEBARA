@@ -102,33 +102,6 @@ $(document).on("click","#logout",function ()
     );
 });
 
-$(document).on("click","#prikaz",function (){
-
-    var Table = document.getElementById("svePorudzbine");
-    Table.innerHTML = "";
-    $.ajax({
-        type:"GET",
-        url:"http://localhost:8080/api/kupac/pregled-porudzbina",
-        dataType:"json",
-        success:function (data){
-            for(i=0;i<data.length;i++)
-            {
-                var row = "<tr>";
-                row+="<td>" + data[i]['id'] + "</td>";
-                row+="<td>" + data[i]['dostavljac'] + "</td>";
-                row+="<td>" + data[i]['restoranPoruceno'] + "</td>";
-                row+="<td>" + data[i]['datumIVremePorudzbine'] + "</td>";
-                row+="<td>" + data[i]['status'] + "</td>";
-                row+="<td>" + data[i]['ukupnaCena'] + "</td>";
-
-                $('#svePorudzbine').append(row);
-            }
-        },
-        error:function (data){
-            console.log("GRESKA:",data)
-        }
-    });
-});
 
 $(document).ready(function (){
 
@@ -345,11 +318,12 @@ $(document).ready(function (){
                 row+="<td>" + data[i]['opis'] + "</td>";
                 row+="<td><button type='button' class='nesto' id='"+data[i]['naziv']+"'>x</button></td>";
 
-
-                if(i==data.length-1)
+                if(data.length-1==i)
                 {
-                    row+="<td><button type='button' class='nesto1' id='"+data[i]['nazivRestorana']+"'>Poruci</button></td>";
+                    row+="<td><button type='button' class='nesto1' id='poruci'>Poruci</button></td>";
+                    row+="<td>" + "<input type=\"text\" id='resta'>" + "</td>";
                 }
+
 
                 $('#korpaArtikli').append(row);
             }
@@ -360,6 +334,27 @@ $(document).ready(function (){
         }
     });
 });
+
+// $(document).ready(function (){
+//     var Table = document.getElementById("korpaArtikli");
+//     $.ajax({
+//         type:"GET",
+//         url:"http://localhost:8080/api/kupac/pregled-korpe",
+//         dataType:"json",
+//         success:function (data){
+//             var row = "<tr>";
+//             row+="<td><button type='button' class='nesto1' id='"+data['ukupnaCena']+"'>Poruci</button></td>";
+//             row+="<td>" + "<input type=\"text\" id='resta'>" + "</td>";
+//             row+="<td>" + "<input type=\"text\" id='rest'>" + "</td>";
+//             $('#korpaArtikli').append(row);
+//
+//             $('#rest').val(data['ukupnaCena']);
+//         },
+//         error:function (data){
+//             console.log("GRESKA:",data)
+//         }
+//     });
+// });
 
 $(document).ready(function () {
         $("#korpaArtikli").on("click", "#smanji", function (){
@@ -477,3 +472,52 @@ $(document).ready(function () {
         });
     }
 );
+
+$(document).on("click","#poruci",function (){
+    var Table = document.getElementById("sviArtikli");
+    var restoran = $("#resta").val();
+
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/kupac/poruci/"+restoran,
+        dataType:"json",
+        contentType:"application/json",
+        success:function()
+        {
+            alert("Uspesno poruceno!");
+            window.location.href="homePage.html";
+        },
+        error:function ()
+        {
+            //alert("Greska prilikom porucivanja!");
+            window.location.href="homePage.html";
+        }
+    });
+});
+
+
+$(document).on("click","#prikazip",function (){
+
+    var Table = document.getElementById("svePorudzbine");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/kupac/pregled-porudzbina",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['id'] + "</td>";
+                row+="<td>" + data[i]['kupacIme'] + "</td>";
+                row+="<td>" + data[i]['status'] + "</td>";
+                row+="<td>" + data[i]['ukupnaCena'] + "</td>";
+
+                $('#svePorudzbine').append(row);
+            }
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});

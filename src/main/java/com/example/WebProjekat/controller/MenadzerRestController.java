@@ -61,7 +61,9 @@ public class MenadzerRestController
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/api/menadzer/porudzbine")
+
+
+    @GetMapping(value = "/api/menadzer/porudzbine", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session)
     {
         Menadzer menadzer = (Menadzer) session.getAttribute("menadzer");
@@ -72,20 +74,10 @@ public class MenadzerRestController
         }
 
         Set<Porudzbina> porudzbine = porudzbinaService.porudzbineRestorana(menadzer);
-        return ResponseEntity.ok(porudzbine);
+        return new ResponseEntity<>(porudzbine,HttpStatus.OK);
     }
-    @GetMapping("/api/menadzer/restorani")
-    public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
-    {
-        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
 
-        if(logovaniMenadzer == null) {
-            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
-        }
-        Set<Restoran> restorani = restoranService.spisakRestorana();
 
-        return ResponseEntity.ok(restorani);
-    }
     @GetMapping("/api/menadzer/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
     {
@@ -123,7 +115,7 @@ public class MenadzerRestController
         return ResponseEntity.ok(restorani);
     }
 
-    @PostMapping("/api/menadzer/restoran/dodaj-artikal")
+    @PostMapping(value = "/api/menadzer/restoran/dodaj-artikal", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<Artikal>> dodajArtikalURestoran(@RequestBody ArtikalDto artikalDto, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
@@ -148,7 +140,8 @@ public class MenadzerRestController
             return new ResponseEntity("Tip je obavezan!",HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(menadzerService.dodajURestoran(logovaniMenadzer,artikalDto));
+        Set<Artikal> artikals = menadzerService.dodajURestoran(logovaniMenadzer,artikalDto);
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
     }
 
     @DeleteMapping("/api/menadzer/restoran/obrisi-artikal")
@@ -176,6 +169,36 @@ public class MenadzerRestController
 
         return ResponseEntity.ok(menadzerService.obrisiIzRestorana(logovaniMenadzer,izmenaArtiklaDto,naziv));
 
+    }
+
+    @GetMapping(value = "/api/menadzer/{id}/artikli", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<Artikal>> pregledArtikala(@PathVariable String id, HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        Set<Artikal> artikals = restoranService.vratiArtikle(id);
+
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/api/menadzer/restorani", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
+    public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        Set<Restoran> restorani = restoranService.spisakRestorana();
+
+        return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
 
 }
