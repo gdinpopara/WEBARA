@@ -40,6 +40,11 @@ div {
     text-color:#000000;
 }
 
+molimte{
+    margin:auto;
+    text-align: center;
+
+
 .nesto1{
     border: 1px solid black;
 }
@@ -47,6 +52,7 @@ div {
 .nesto2
 {
     border: 2px solid black;
+
 }
 
 .nesto3
