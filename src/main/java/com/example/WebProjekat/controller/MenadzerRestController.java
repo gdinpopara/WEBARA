@@ -4,6 +4,8 @@ import com.example.WebProjekat.dto.ArtikalDto;
 import com.example.WebProjekat.dto.IzmenaArtiklaDto;
 import com.example.WebProjekat.dto.LoginDto;
 import com.example.WebProjekat.entity.*;
+import com.example.WebProjekat.repository.ArtikalRepository;
+import com.example.WebProjekat.service.ArtikalService;
 import com.example.WebProjekat.service.MenadzerService;
 import com.example.WebProjekat.service.PorudzbinaService;
 import com.example.WebProjekat.service.RestoranService;
@@ -27,6 +29,9 @@ public class MenadzerRestController
 
     @Autowired
     private RestoranService restoranService;
+
+    @Autowired
+    private ArtikalService artikalService;
 
     @PostMapping(value = "/api/menadzer/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
     public ResponseEntity<LoginDto> login(@RequestBody LoginDto loginDto, HttpSession session)
@@ -115,7 +120,7 @@ public class MenadzerRestController
         return ResponseEntity.ok(restorani);
     }
 
-    @PostMapping(value = "/api/menadzer/restoran/dodaj-artikal", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/menadzer/restoran/dodaj-artikal", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
     public ResponseEntity<Set<Artikal>> dodajArtikalURestoran(@RequestBody ArtikalDto artikalDto, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
@@ -144,8 +149,8 @@ public class MenadzerRestController
         return new ResponseEntity<>(artikals,HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/menadzer/restoran/obrisi-artikal")
-    public ResponseEntity<Set<Artikal>> obrisiArtikal(@RequestParam String naziv, HttpSession session)
+    @PostMapping(value = "/api/menadzer/restoran/{id}/obrisi-artikal", produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
+    public ResponseEntity<Set<Artikal>> obrisiArtikal(@PathVariable String id, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
 
@@ -154,11 +159,11 @@ public class MenadzerRestController
             return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
         }
 
-        return ResponseEntity.ok(menadzerService.azurirajIzRestorana(logovaniMenadzer,naziv));
+        return new ResponseEntity<>(menadzerService.azurirajIzRestorana(logovaniMenadzer,id),HttpStatus.OK);
     }
 
-    @PostMapping("/api/menadzer/restoran/izmeni-artikal")
-    public ResponseEntity<Artikal> izmeniArtikal(@RequestParam String naziv, @RequestBody IzmenaArtiklaDto izmenaArtiklaDto, HttpSession session)
+    @PostMapping(value = "/api/menadzer/restoran/izmeni-artikal/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Artikal> izmeniArtikal(@PathVariable String id, @RequestBody IzmenaArtiklaDto izmenaArtiklaDto, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
 
@@ -167,11 +172,12 @@ public class MenadzerRestController
             return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
         }
 
-        return ResponseEntity.ok(menadzerService.obrisiIzRestorana(logovaniMenadzer,izmenaArtiklaDto,naziv));
+        Artikal artikal = menadzerService.obrisiIzRestorana(logovaniMenadzer,izmenaArtiklaDto,id);
+        return new ResponseEntity<>(artikal,HttpStatus.OK);
 
     }
 
-    @GetMapping(value = "/api/menadzer/{id}/artikli", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/menadzer/{id}/artikli", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Artikal>> pregledArtikala(@PathVariable String id, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
@@ -201,4 +207,34 @@ public class MenadzerRestController
         return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/api/menadzer/artikli", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
+    public ResponseEntity<Set<Artikal>> pregledArtikalaa(HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        Set<Artikal> artikals = logovaniMenadzer.getZaduzenRestoran().getArtikli();
+
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/api/menadzer/izmena/{id}", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
+    public ResponseEntity<Artikal> pregledArtikalaa(@PathVariable String id,HttpSession session)
+    {
+        Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
+
+        if(logovaniMenadzer == null)
+        {
+            return new ResponseEntity("Menadzer nije logovan!",HttpStatus.FORBIDDEN);
+        }
+
+        Artikal artikals = artikalService.nadjiPoId(id);
+
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
+    }
 }

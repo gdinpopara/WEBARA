@@ -190,3 +190,180 @@ function formToJson70(naz,t,c,o,k)
         }
     );
 }
+
+$(document).ready(function (){
+    var Table = document.getElementById("sviArtiklii");
+    Table.innerHTML = "";
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/menadzer/artikli",
+        dataType:"json",
+        success:function (data){
+            for(i=0;i<data.length;i++)
+            {
+                var row = "<tr>";
+                row+="<td>" + data[i]['naziv'] + "</td>";
+                row+="<td>" + data[i]['cena'] + "</td>";
+                row+="<td>" + data[i]['tip'] + "</td>";
+                row+="<td>" + data[i]['kolicina'] + "</td>";
+                row+="<td>" + data[i]['opis'] + "</td>";
+                row+="<td><button type='button' class='nesto1' id='"+data[i]['naziv']+"'>Obrisi</button></td>";
+                row+="<td><button type='button' class='nesto2' id='"+data[i]['naziv']+"'>Izmeni</button></td>";
+
+                $('#sviArtiklii').append(row);
+            }
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).on("click",".nesto1",function (){
+    var k = this.id;
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/menadzer/restoran/"+this.id+"/obrisi-artikal",
+        dataType:"json",
+        success:function (){
+            alert("Artikal je uspesno obrisan!");
+            location.reload();
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+
+$(document).ready(function () {
+        $("#sviArtiklii").on("click", ".nesto2", function (){
+            var currentRow = $(this).closest("tr");
+
+            var artikal = currentRow.find("td:eq(0)").text();
+
+            $.ajax(
+                {
+                    type:"GET",
+                    url:"http://localhost:8080/api/menadzer/izmena/" + artikal,
+                    dataType:"json",
+                    success: function (data) {
+                        $('#nazart').val(data['naziv']);
+                        $('#cena').val(data['cena']);
+                        $('#opis').val(data['opis']);
+                        $('#tip').val(data['tip']);
+                        $('#kolicina').val(data['kolicina']);
+                    },
+                    error: function (data) {
+                        alert("Greska prilikom pokusaja izmene!");
+                    }
+                }
+            );
+
+        });
+    }
+);
+
+
+$(document).on("submit","#podaciizmena",function (event){
+    event.preventDefault();
+
+    var id = $("#nazart").val();
+    var c = $("#cena").val();
+    var o = $("#opis").val();
+    var t = $("#tip").val();
+    var kol = $("#kolicina").val();
+
+    var izmenjeniArtikal = formToJson100(c,o,t,kol);
+
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8080/api/menadzer/restoran/izmeni-artikal/"+id,
+        dataType:"json",
+        contentType:"application/json",
+        data:izmenjeniArtikal,
+        success:function (){
+            alert("Artikal je uspesno promenjen!");
+            location.reload();
+        },
+        error:function (data){
+            //alert(data['naziv'] + data['cena']);
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+function formToJson100(naz,t,c,o)
+{
+    return JSON.stringify(
+        {
+            "cena":naz,
+            "opis":t,
+            "tip":c,
+            "kolicina":o
+        }
+    );
+}
+
+$(document).ready(function (){
+
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/menadzer-pregled",
+        dataType:"json",
+        success:function (data) {
+            console.log(data);
+            $('#korIme').val(data['korisnickoIme']);
+            $('#ime').val(data['ime']);
+            $('#prezime').val(data['prezime']);
+            $('#pol').val(data['pol']);
+            $('#uloga').val(data['uloga']);
+        },
+        error:function (data){
+            console.log("GRESKA:",data)
+        }
+    });
+});
+
+$(document).on("submit","#podaci",function (event){
+    event.preventDefault();
+
+    var korisnickoIme = $("#ime").val();
+    var lozinka = $("#prezime").val();
+    var p = $("#pol").val();
+    var datum;
+
+    var noviKorisnik = formToJson4(korisnickoIme,lozinka,p,datum);
+
+    $.ajax(
+        {
+            type:"POST",
+            url:"http://localhost:8080/api/menadzer-izmeni",
+            dataType:"json",
+            contentType:"application/json",
+            data:noviKorisnik,
+            success:function()
+            {
+                alert("Uspesno izmenjeni podaci");
+            },
+            error:function (data)
+            {
+                alert("Greska prilikom promene podataka!",data);
+            }
+        }
+    );
+});
+
+function formToJson4(ki,loz,p,dr)
+{
+    return JSON.stringify(
+        {
+            "ime":ki,
+            "prezime":loz,
+            "pol":p,
+            "datumRodjenja":dr
+        }
+    );
+}

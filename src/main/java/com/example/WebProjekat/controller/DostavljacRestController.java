@@ -83,6 +83,7 @@ public class DostavljacRestController
         return ResponseEntity.ok(porudzbine);
     }
 
+
     @PostMapping("/api/dostavljac/logout")// URADJENO
     public ResponseEntity logout(HttpSession session)
     {
@@ -96,7 +97,9 @@ public class DostavljacRestController
         session.invalidate();
         return new ResponseEntity("Dostavljac je odjavljen!",HttpStatus.OK);
     }
-    @GetMapping("/api/dostavljac/restorani")
+
+
+    @GetMapping(value = "/api/dostavljac/restorani",produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
     public ResponseEntity<Set<Restoran>> prikazRestorana(HttpSession session)
     {
         Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
@@ -106,8 +109,24 @@ public class DostavljacRestController
         }
         Set<Restoran> restorani = restoranService.spisakRestorana();
 
-        return ResponseEntity.ok(restorani);
+        return new ResponseEntity<>(restorani,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/api/dostavljac/{id}/artikli", produces = MediaType.APPLICATION_JSON_VALUE) // URADJENO
+    public ResponseEntity<Set<Artikal>> pregledArtikala(@PathVariable String id, HttpSession session)
+    {
+        Dostavljac logovaniDostavljac = (Dostavljac) session.getAttribute("dostavljac");
+
+        if(logovaniDostavljac == null) {
+            return new ResponseEntity("Niste ulogovani!",HttpStatus.FORBIDDEN);
+        }
+
+        Set<Artikal> artikals = restoranService.vratiArtikle(id);
+
+        return new ResponseEntity<>(artikals,HttpStatus.OK);
+    }
+
+
     @GetMapping("/api/dostavljac/pretragarpn")
     public ResponseEntity<Set<Restoran>> pretraziRestoranPoNazivu(@RequestParam String naziv , HttpSession session)
     {

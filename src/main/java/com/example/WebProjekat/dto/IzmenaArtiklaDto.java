@@ -5,6 +5,7 @@ import com.example.WebProjekat.entity.Tip;
 public class IzmenaArtiklaDto
 {
 
+
     private double cena;
 
     private  String opis;

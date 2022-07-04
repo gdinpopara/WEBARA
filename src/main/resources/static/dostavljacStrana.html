@@ -2,28 +2,125 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dostavljac strana</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/dostavljac.js"></script>
+    <link rel="stylesheet" href="/css/adminLogin.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+    <title>Menadzer strana</title>
 </head>
 <body>
-<table>
+<header class="p-3 colorHeader text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img class="bi me-2 size"  src="../assets/lanch.png">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
+                <li><a href="listaArtikala.html" class="nav-link px-2 text-white">Artikli</a></li>
+                <li><a href="porudzbineRestorana.html" class="nav-link px-2 text-white">Porudzbine</a></li>
+                <!--<li><a href="korpa.html" class="nav-link px-2 text-white">Korpa</a></li>-->
+                <li><a href="korisnickiPodaciMenadzer.html" class="nav-link px-2 text-white">Korisnicki profil</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control form-control-dark text-white " placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button id="logout" type="button" class="btn btn-outline-light me-2">Logout</button>
+                <!--<button href="index.html" type="button" class="btn btn-warning">Sign-up</button>-->
+            </div>
+        </div>
+    </div>
+</header>
+<br><br><br><br><br><br><br>
+<!--<form id="dodajA">-->
+<!--    <label for="nazi">Naziv:</label>-->
+<!--    <input id="nazi" type="text"/><br>-->
+<!--    <label for="ti">Tip:</label>-->
+<!--    <input id="ti" type="text"/><br>-->
+<!--    <label for="cen">Cena:</label>-->
+<!--    <input id="cen" type="text"/><br>-->
+<!--    <label for="opi">Opis:</label>-->
+<!--    <input id="opi" type="text"/><br>-->
+<!--    <label for="kolicin">Kolicina:</label>-->
+<!--    <input id="kolicin" type="text"/><br>-->
+<!--    <input type="submit" value="Dodaj">-->
+<!--</form>-->
+<!--<br><br><br><br><br><br><br><br><br>-->
+<table class="table table-striped" id="tabela">
     <thead>
-
-    <th>id</th>
-    <th>kupac</th>
-    <th>poruceni artikli</th>
-    <th>restoran</th>
-    <th>datum</th>
-    <th>status</th>
-    <th>ukupna cena</th>
-
+    <th>Restoran</th>
+    <th>Naziv</th>
+    <th>Cena</th>
+    <th>Tip</th>
+    <th>Kolicina</th>
+    <th>Opis</th>
     </thead>
-    <tbody id="porudzbineZ">
+    <tbody id="sviArtikli">
 
     </tbody>
 </table>
 
-<button type="button" id="logout">logout!</button>
+<br><br><br><br><br><br><br>
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">LANCH</h1>
+    <div class="col-lg-6 mx-auto">
+        <!--<p class="lead mb-4">Dobro dosli na najbrzu dostavu u vaseme gradu.Klikom na jedno dugme imate pristup preko 2000 najboljih restorana u vasoj okolini i sire.Uverite se i vi zasto imamo preko 100000 zadovoljnih korisnika</p>-->
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center" id="restorani">
+            <!--<button type="button" class="btn btn-primary btn-lg px-4 gap-3 bg-warning"></button>-->
+        </div>
+    </div>
+</div>
+<br><br>
+
+<br><br>
+<!--<table class="table table-striped" id="tabela">-->
+<!--    <thead>-->
+<!--    <th>Restoran</th>-->
+<!--    <th>Naziv</th>-->
+<!--    <th>Cena</th>-->
+<!--    <th>Tip</th>-->
+<!--    <th>Kolicina</th>-->
+<!--    <th>Opis</th>-->
+<!--    <th>Kolicina</th>-->
+<!--    <th></th>-->
+<!--    </thead>-->
+<!--    <tbody id="sviArtikli">-->
+
+<!--    </tbody>-->
+<!--</table>-->
+
+<!--<br><br><br><br><br><br><br>-->
+<!--<div class="px-4 py-5 my-5 text-center">-->
+<!--    <h1 class="display-5 fw-bold">LANCH</h1>-->
+<!--    <div class="col-lg-6 mx-auto">-->
+<!--        &lt;!&ndash;<p class="lead mb-4">Dobro dosli na najbrzu dostavu u vaseme gradu.Klikom na jedno dugme imate pristup preko 2000 najboljih restorana u vasoj okolini i sire.Uverite se i vi zasto imamo preko 100000 zadovoljnih korisnika</p>&ndash;&gt;-->
+<!--        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center" id="restorani">-->
+<!--            &lt;!&ndash;<button type="button" class="btn btn-primary btn-lg px-4 gap-3 bg-warning"></button>&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<br><br>-->
+
+<br><br>
+<footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+    <p class="text-center text-muted">© 2022 LANCH, Inc</p>
+</footer>
 </body>
 </html>
