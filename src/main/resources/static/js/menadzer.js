@@ -242,9 +242,10 @@ $(document).ready(function (){
 $(document).on("click",".nesto1",function (){
     var k = this.id;
     $.ajax({
-        type:"POST",
+        type:"DELETE",
         url:"http://localhost:8080/api/menadzer/restoran/"+this.id+"/obrisi-artikal",
         dataType:"json",
+        contentType:"application/json",
         success:function (){
             alert("Artikal je uspesno obrisan!");
             location.reload();
@@ -298,7 +299,7 @@ $(document).on("submit","#podaciizmena",function (event){
     var izmenjeniArtikal = formToJson100(c,o,t,kol);
 
     $.ajax({
-        type:"POST",
+        type:"PUT",
         url:"http://localhost:8080/api/menadzer/restoran/izmeni-artikal/"+id,
         dataType:"json",
         contentType:"application/json",

@@ -149,7 +149,7 @@ public class MenadzerRestController
         return new ResponseEntity<>(artikals,HttpStatus.OK);
     }
 
-    @PostMapping(value = "/api/menadzer/restoran/{id}/obrisi-artikal", produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
+    @DeleteMapping(value = "/api/menadzer/restoran/{id}/obrisi-artikal", produces = MediaType.APPLICATION_JSON_VALUE) //URADJENO
     public ResponseEntity<Set<Artikal>> obrisiArtikal(@PathVariable String id, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
@@ -162,7 +162,7 @@ public class MenadzerRestController
         return new ResponseEntity<>(menadzerService.azurirajIzRestorana(logovaniMenadzer,id),HttpStatus.OK);
     }
 
-    @PostMapping(value = "/api/menadzer/restoran/izmeni-artikal/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/api/menadzer/restoran/izmeni-artikal/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Artikal> izmeniArtikal(@PathVariable String id, @RequestBody IzmenaArtiklaDto izmenaArtiklaDto, HttpSession session)
     {
         Menadzer logovaniMenadzer = (Menadzer) session.getAttribute("menadzer");
