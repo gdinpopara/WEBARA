@@ -50,3 +50,11 @@ form
 .colorHeader{
     background-color:#F3F32B;
 }
+.textC{
+    text-color:#000000;
+}
+.btn:hover{
+    background-color:#F3F32B;
+    color:#000000;
+    border:#F3F32B;
+}
